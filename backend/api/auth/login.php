@@ -1,5 +1,5 @@
 <?php
-require_once "includes/db.php";
+require_once "D:/Xampp/htdocs/HeThongChamSocThuCung/includes/db.php";
 session_start();
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
@@ -18,8 +18,24 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             // Đăng nhập thành công
             $_SESSION['username'] = $user['username'];
             $_SESSION['role'] = $user['role'];
-            header("Location: dashboard.php");
-            exit();
+
+            // Điều hướng theo role
+            switch ($user['role']) {
+                case 'admin':
+                    header('Location: ../../../backend/api/dashboards/admin_dashboard.php');
+                    exit;
+                case 'bác sĩ':
+                    header('Location: ../../backend/api/dashboard_bacsi.php');
+                    exit;
+                case 'nhân viên':
+                    header('Location: ../../backend/api/dashboard_nhanvien.php');
+                    exit;
+                case 'khách hàng':
+                    header('Location: ../../../backend/api/customer');
+                    exit;
+                default:
+                    echo "Vai trò không hợp lệ.";
+            }
         } else {
             echo "Sai mật khẩu!";
         }
@@ -30,12 +46,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $stmt->close();
 }
 ?>
+
+<!-- Giao diện đăng nhập -->
 <form method="POST">
     <h2>Đăng nhập</h2>
     Tên đăng nhập: <input type="text" name="username" required><br>
     Mật khẩu: <input type="password" name="password" required><br>
     <input type="submit" value="Đăng nhập">
     <p>Bạn chưa có tài khoản?</p>
-    <p><a href ="register.php" target ="_self">Đăng ký</a></p>
+    <p><a href="register.php">Đăng ký</a></p>
 </form>
+
 <link rel="stylesheet" href="css/style.css">
