@@ -18,6 +18,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             // Đăng nhập thành công
             $_SESSION['username'] = $user['username'];
             $_SESSION['role'] = $user['role'];
+            $_SESSION['avatar'] = $user['avatar'];
+            $_SESSION['id'] = $user['id'];
+            $_SESSION['full_name'] = $user['full_name'];
+            $_SESSION['contact_info'] = $user['contact_info'];
+
 
             // Điều hướng theo role
             switch ($user['role']) {
@@ -25,13 +30,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     header('Location: ../../../backend/api/dashboards/admin_dashboard.php');
                     exit;
                 case 'bác sĩ':
-                    header('Location: ../../backend/api/dashboard_bacsi.php');
-                    exit;
-                case 'nhân viên':
-                    header('Location: ../../backend/api/dashboard_nhanvien.php');
+                    header('Location: ../../../backend/api/dashboards/doctor_dashboard.php');
                     exit;
                 case 'khách hàng':
-                    header('Location: ../../../backend/api/customer');
+                    header('Location: ../../../backend/api/dashboards/customer_dashboard.php');
                     exit;
                 default:
                     echo "Vai trò không hợp lệ.";

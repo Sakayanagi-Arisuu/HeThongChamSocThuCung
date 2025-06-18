@@ -1,9 +1,9 @@
 <?php
-require_once '../../../includes/db.php';
+require_once '../../../../includes/db.php';
 session_start();
 
 if (!isset($_SESSION['username'])) {
-    header('Location: ../../../auth/login.php');
+    header('Location: ../../../../auth/login.php');
     exit;
 }
 
@@ -40,4 +40,4 @@ if (!$pet) {
     <li><strong>Ghi chú:</strong> <?= nl2br(htmlspecialchars($pet['notes'])) ?></li>
 </ul>
 
-<a href="pets.php">Quay lại danh sách</a>
+<a href="pet_index.php">Quay lại danh sách</a>

@@ -1,5 +1,5 @@
 <?php
-require_once '../../../includes/db.php';
+require_once '../../../../includes/db.php';
 session_start();
 
 // Kiểm tra nếu không đăng nhập hoặc không phải admin thì chặn

@@ -1,5 +1,5 @@
 <?php
-require_once '../../../includes/db.php';
+require_once '../../../../includes/db.php';
 session_start();
 
 if (!isset($_SESSION['username'])) {
@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->bind_param("isssssisi", $owner_id, $name, $species, $breed, $birth_date, $gender, $weight, $notes, $id);
 
     if ($stmt->execute()) {
-        header('Location: pets.php');
+        header('Location: pet_index.php');
     } else {
         echo "Lỗi cập nhật: " . $stmt->error;
     }
