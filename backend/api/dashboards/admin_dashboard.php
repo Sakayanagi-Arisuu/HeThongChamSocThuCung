@@ -54,7 +54,7 @@ if (!empty($_SESSION['avatar'])) {
 
     <ul class="actions">
         <li><a href="../../../backend/api/admin/users_management/list_users.php">Quản lý người dùng</a></li>
-        <li><a href="system_settings.php">Cấu hình hệ thống</a></li>
+        <li><a href="../products/index_product.php">Quản lý sản phẩm</a></li>
         <li><a href="stats.php">Thống kê doanh thu</a></li>
         <p><a href="../../../backend/api/auth/logout.php">Đăng xuất</a></p>
     </ul>

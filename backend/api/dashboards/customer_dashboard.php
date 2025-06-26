@@ -1,87 +1,126 @@
 <?php
-// File: customer_dashboard.php
 session_start();
 require_once "../../../includes/db.php";
 
-if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'khách hàng') {
+if (!isset($_SESSION['username'])) {
     header("Location: ../auth/login.php");
     exit;
 }
 
-// Đường dẫn ảnh đại diện
-$defaultAvatar = '../../../images/download.jpg';
-$avatarPath = $defaultAvatar;
+$username = $_SESSION['username'];
+$stmt = $conn->prepare("SELECT * FROM users WHERE username=?");
+$stmt->bind_param("s", $username);
+$stmt->execute();
+$user = $stmt->get_result()->fetch_assoc();
 
-if (!empty($_SESSION['avatar'])) {
-    $avatarFile = __DIR__ . '/../../../' . $_SESSION['avatar'];
-    if (file_exists($avatarFile)) {
-        $avatarPath = '../../../' . $_SESSION['avatar'];
+// Cập nhật thông tin cá nhân
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_info'])) {
+    $full_name = trim($_POST['full_name']);
+    $contact_info = trim($_POST['contact_info']);
+    $stmt2 = $conn->prepare("UPDATE users SET full_name=?, contact_info=? WHERE username=?");
+    $stmt2->bind_param("sss", $full_name, $contact_info, $username);
+    if ($stmt2->execute()) {
+        $_SESSION['full_name'] = $full_name;
+        $_SESSION['contact_info'] = $contact_info;
+        $success = "Cập nhật thông tin thành công!";
+        $stmt->execute();
+        $user = $stmt->get_result()->fetch_assoc();
+    } else {
+        $error = "Có lỗi xảy ra, vui lòng thử lại.";
+    }
+    $stmt2->close();
+}
+
+// Xử lý upload avatar (AJAX)
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['avatar'])) {
+    $uploadDir = '../../../uploads/avatars/';
+    if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
+    $file = $_FILES['avatar'];
+    $fileExt = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+    $allowed = ['jpg','jpeg','png','gif'];
+    if (in_array($fileExt, $allowed)) {
+        $newName = $username . '_' . time() . '.' . $fileExt;
+        $savePath = $uploadDir . $newName;
+        if (move_uploaded_file($file['tmp_name'], $savePath)) {
+            // Lưu đường dẫn tuyệt đối từ gốc web (bắt đầu bằng '/')
+            $relPath = '/HeThongChamSocThuCung/uploads/avatars/' . $newName;
+            $stmt = $conn->prepare("UPDATE users SET avatar=? WHERE username=?");
+            $stmt->bind_param("ss", $relPath, $username);
+            $stmt->execute();
+            $_SESSION['avatar'] = $relPath;
+            echo $relPath;
+            exit;
+        } else {
+            http_response_code(400); echo "Tải lên thất bại."; exit;
+        }
+    } else {
+        http_response_code(400); echo "File không hợp lệ."; exit;
     }
 }
+
+// Lấy avatar: dùng tuyệt đối, luôn đúng cho mọi trang
+$avatar = !empty($user['avatar']) ? $user['avatar'] : '/HeThongChamSocThuCung/images/download.jpg';
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="vi">
 <head>
-    <title>Customer Dashboard</title>
-    <link rel="stylesheet" href="../../css/style.css">
+    <meta charset="UTF-8">
+    <title>Thông tin cá nhân - Pet Care Services</title>
     <style>
-        .avatar {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            border: 2px solid #ccc;
-            object-fit: cover;
-        }
-        .actions a {
-            display: inline-block;
-            margin: 8px 10px;
-            text-decoration: none;
-            background-color: #4CAF50;
-            color: white;
-            padding: 8px 12px;
-            border-radius: 4px;
-        }
-        .actions a:hover {
-            background-color: #45a049;
-        }
+        body { font-family: Arial; background: #f9f9f9;}
+        .profile-box {max-width:450px; margin:40px auto 0; background:#fff; border-radius:10px; box-shadow:0 3px 12px #0001; padding:32px;}
+        .profile-box h2 {color: #0077a3;}
+        .avatar {width:110px; height:110px; border-radius:50%; border:2px solid #ddd; object-fit:cover; margin-bottom:10px;}
+        .profile-box form {margin-top:15px;}
+        .profile-box label {display:block; margin-bottom:5px; font-weight:bold;}
+        .profile-box input[type="text"], .profile-box input[type="email"] {width:100%; padding:9px 12px; border:1px solid #ccc; border-radius:6px; margin-bottom:14px;}
+        .profile-box input[readonly] {background: #f3f3f3;}
+        .profile-box button, .profile-box .back-btn {background:#0099cc; color:#fff; border:none; border-radius:6px; padding:10px 24px; font-size:16px; font-weight:bold; cursor:pointer; margin-right:8px;}
+        .profile-box .back-btn {background:#ccc; color:#222;}
+        .profile-box .back-btn:hover {background:#bbb;}
+        .profile-box button[type="submit"]:hover {background:#0077a3;}
+        .msg-success {color:green;}
+        .msg-error {color:red;}
+        .avatar-btn {background:#eee; color:#222; border:1px solid #ccc; font-size:13px; border-radius:6px; padding:5px 13px; cursor:pointer;}
     </style>
 </head>
 <body>
-    <h2>Chào mừng, <?= htmlspecialchars($_SESSION['full_name']) ?>!</h2>
-    <div class="profile">
-        <img src="<?= htmlspecialchars($avatarPath) ?>" alt="Avatar" class="avatar">
-        <form id="avatarForm" enctype="multipart/form-data" style="display:inline;">
-            <input type="file" id="avatarInput" name="avatar" accept="image/*" style="display:none;" onchange="uploadAvatar()">
-            <button type="button" onclick="document.getElementById('avatarInput').click()">Cập nhật ảnh đại diện</button>
+    <div class="profile-box">
+        <h2>Thông tin cá nhân</h2>
+        <div style="text-align:center;">
+            <img src="<?= htmlspecialchars($avatar) ?>?v=<?= time() ?>" alt="Avatar" class="avatar" id="avatarPreview">
+            <form id="avatarForm" enctype="multipart/form-data" style="margin-bottom:10px;">
+                <input type="file" id="avatarInput" name="avatar" accept="image/*" style="display:none;" onchange="uploadAvatar()">
+                <button type="button" class="avatar-btn" onclick="document.getElementById('avatarInput').click()">Đổi ảnh đại diện</button>
+            </form>
+        </div>
+        <?php if (!empty($success)) echo '<div class="msg-success">'.$success.'</div>'; ?>
+        <?php if (!empty($error)) echo '<div class="msg-error">'.$error.'</div>'; ?>
+        <form method="POST">
+            <label>Tên đăng nhập</label>
+            <input type="text" name="username" value="<?= htmlspecialchars($user['username']) ?>" readonly>
+            <label>Họ và tên</label>
+            <input type="text" name="full_name" value="<?= htmlspecialchars($user['full_name']) ?>" required>
+            <label>Email/Số điện thoại liên hệ</label>
+            <input type="text" name="contact_info" value="<?= htmlspecialchars($user['contact_info']) ?>" required>
+            <label>Vai trò</label>
+            <input type="text" value="<?= htmlspecialchars($user['role']) ?>" readonly>
+            <button type="submit" name="update_info">Lưu thông tin</button>
+            <button type="button" class="back-btn" onclick="window.history.back();">Trở về</button>
         </form>
-        <p><strong>Tên đăng nhập:</strong> <?= htmlspecialchars($_SESSION['username']) ?></p>
-        <p><strong>Liên hệ:</strong> <?= htmlspecialchars($_SESSION['contact_info']) ?></p>
-        <p><strong>Vai trò:</strong> <?= htmlspecialchars($_SESSION['role']) ?></p>
     </div>
-    <div class="actions">
-        <a href="../customer/appointments/book_appointment.php">🗓️ Đặt lịch khám</a>
-        <a href="../customer/appointments/index_appointment.php">📖 Xem lịch hẹn</a>
-        <a href="../customer/feedback.php">✉️ Gửi phản hồi</a>
-        <a href="../auth/logout.php">🚪 Đăng xuất</a>
-    </div>
-
     <script>
         function uploadAvatar() {
-            const formData = new FormData(document.getElementById('avatarForm'));
-            formData.append("username", "<?= $_SESSION['username'] ?>");
-
-            fetch('../../api/dashboards/upload_avatar.php', {
-                method: 'POST',
-                body: formData
-            })
+            var formData = new FormData(document.getElementById('avatarForm'));
+            fetch('', { method: 'POST', body: formData })
             .then(res => res.text())
-            .then(data => {
-                alert(data);
-                location.reload();
-            })
-            .catch(err => {
-                console.error(err);
-                alert("Lỗi khi tải ảnh lên.");
+            .then(src => {
+                // Chỉ set lại src nếu server trả về đúng path tuyệt đối
+                if(src.startsWith('/HeThongChamSocThuCung/uploads/avatars/')) {
+                    document.getElementById('avatarPreview').src = src + '?v=' + Date.now();
+                } else {
+                    alert(src);
+                }
             });
         }
     </script>

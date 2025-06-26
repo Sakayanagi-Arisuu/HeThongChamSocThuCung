@@ -11,6 +11,7 @@ if (!isset($_SESSION['username'])) {
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['avatar'])) {
     $uploadDir = '../../../uploads/avatars/';
+    $webPathPrefix = '/HeThongChamSocThuCung/uploads/avatars/';
     $username = $_SESSION['username'];
 
     // Tạo thư mục nếu chưa có
@@ -32,17 +33,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['avatar'])) {
     $destination = $uploadDir . $newFileName;
 
     if (move_uploaded_file($fileTmpPath, $destination)) {
-        // Lưu đường dẫn (dạng lưu trữ từ thư mục gốc)
-        $relativePath = 'uploads/avatars/' . $newFileName;
+        // Đường dẫn từ gốc web
+        $relativePath = $webPathPrefix . $newFileName;
 
-        // Cập nhật vào DB (ví dụ bảng `doctors`)
+        // Cập nhật vào DB
         $stmt = $conn->prepare("UPDATE users SET avatar = ? WHERE username = ?");
         $stmt->bind_param("ss", $relativePath, $username);
         $stmt->execute();
 
         // Cập nhật session
         $_SESSION['avatar'] = $relativePath;
-
         echo $relativePath;
     } else {
         echo "Không thể tải ảnh lên.";

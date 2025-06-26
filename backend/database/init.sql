@@ -29,7 +29,9 @@ CREATE TABLE IF NOT EXISTS appointments (
     id INT AUTO_INCREMENT PRIMARY KEY,
     pet_id INT,
     customer_id INT,
+    phone VARCHAR(20) AFTER customer_id,
     doctor_id INT,
+    service VARCHAR(100) AFTER schedule_time,
     schedule_time DATETIME,
     status ENUM('Đã đặt', 'Đã khám', 'Đã hủy', 'Check-in'),
     reason TEXT,
@@ -76,8 +78,31 @@ CREATE TABLE IF NOT EXISTS feedbacks (
 CREATE TABLE IF NOT EXISTS payments (
     id INT AUTO_INCREMENT PRIMARY KEY,
     appointment_id INT,
+    order_id INT,
     amount DECIMAL(10, 2),
     status ENUM('Đã thanh toán', 'Chưa thanh toán'),
     paid_at DATETIME,
     FOREIGN KEY (appointment_id) REFERENCES appointments(id)
+    FOREIGN KEY (order_id) REFERENCES orders(id)
+);
+-- Bảng sản phẩm
+CREATE TABLE IF NOT EXISTS products (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    description TEXT,
+    price DECIMAL(10,2) NOT NULL,
+    stock INT NOT NULL, -- số lượng tồn kho
+    image VARCHAR(255), -- đường dẫn ảnh sản phẩm
+    category VARCHAR(50), -- phân loại sản phẩm
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+-- Bảng đơn hàng
+CREATE TABLE IF NOT EXISTS orders (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    customer_id INT,
+    total_amount DECIMAL(10,2),
+    status ENUM('Chờ thanh toán', 'Đã thanh toán', 'Đã hủy') DEFAULT 'Chờ thanh toán',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    paid_at DATETIME,
+    FOREIGN KEY (customer_id) REFERENCES users(id)
 );

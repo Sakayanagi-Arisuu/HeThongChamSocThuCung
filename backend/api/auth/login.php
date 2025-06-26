@@ -3,8 +3,8 @@ require_once "D:/Xampp/htdocs/HeThongChamSocThuCung/includes/db.php";
 session_start();
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $username = $_POST['username'];
-    $inputPassword = $_POST['password'];
+    $username = $_POST['username'] ?? '';
+    $inputPassword = $_POST['password'] ?? '';
 
     $stmt = $conn->prepare("SELECT * FROM users WHERE username = ?");
     $stmt->bind_param("s", $username);
@@ -23,7 +23,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $_SESSION['full_name'] = $user['full_name'];
             $_SESSION['contact_info'] = $user['contact_info'];
 
-
             // Điều hướng theo role
             switch ($user['role']) {
                 case 'admin':
@@ -33,7 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     header('Location: ../../../backend/api/dashboards/doctor_dashboard.php');
                     exit;
                 case 'khách hàng':
-                    header('Location: ../../../backend/api/dashboards/customer_dashboard.php');
+                    header('Location: ../../../frontend/customer/customer_dashboard.php');
                     exit;
                 default:
                     echo "Vai trò không hợp lệ.";
@@ -47,16 +46,19 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     $stmt->close();
 }
+
+// Nếu muốn giữ lại form đăng nhập ở đây khi truy cập trực tiếp
+if ($_SERVER["REQUEST_METHOD"] !== "POST") {
 ?>
-
-<!-- Giao diện đăng nhập -->
-<form method="POST">
-    <h2>Đăng nhập</h2>
-    Tên đăng nhập: <input type="text" name="username" required><br>
-    Mật khẩu: <input type="password" name="password" required><br>
-    <input type="submit" value="Đăng nhập">
-    <p>Bạn chưa có tài khoản?</p>
-    <p><a href="register.php">Đăng ký</a></p>
-</form>
-
-<link rel="stylesheet" href="css/style.css">
+    <form method="POST">
+        <h2>Đăng nhập</h2>
+        Tên đăng nhập: <input type="text" name="username" required><br>
+        Mật khẩu: <input type="password" name="password" required><br>
+        <input type="submit" value="Đăng nhập">
+        <p>Bạn chưa có tài khoản?</p>
+        <p><a href="register.php">Đăng ký</a></p>
+    </form>
+    <link rel="stylesheet" href="css/style.css">
+<?php
+}
+?>
