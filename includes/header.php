@@ -52,7 +52,7 @@
                 </span>
                 <span>
                     <img src="https://img.icons8.com/ios-filled/22/0099cc/calendar--v1.png" style="vertical-align: middle;">
-                    <a href="#" class="datlich">ĐẶT LỊCH HẸN</a>
+                    <a href="\HeThongChamSocThuCung\frontend\appointments\book_appointment.php" class="datlich">ĐẶT LỊCH HẸN</a>
                 </span>
                 <span>
                     <a href="#" class="datlich" style="background:#33b7ff;">

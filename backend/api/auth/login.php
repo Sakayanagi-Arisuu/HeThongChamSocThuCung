@@ -11,9 +11,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $stmt->execute();
     $result = $stmt->get_result();
 
+    $login_success = false;
     if ($result->num_rows === 1) {
         $user = $result->fetch_assoc();
-
         if (password_verify($inputPassword, $user['password'])) {
             // Đăng nhập thành công
             $_SESSION['username'] = $user['username'];
@@ -26,25 +26,24 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             // Điều hướng theo role
             switch ($user['role']) {
                 case 'admin':
-                    header('Location: ../../../backend/api/dashboards/admin_dashboard.php');
+                    header('Location: ../../../frontend/admin/admin_dashboard.php');
                     exit;
                 case 'bác sĩ':
-                    header('Location: ../../../backend/api/dashboards/doctor_dashboard.php');
+                    header('Location: ../../../frontend/doctor/doctor_dashboard.php');
                     exit;
                 case 'khách hàng':
                     header('Location: ../../../frontend/customer/customer_dashboard.php');
                     exit;
                 default:
                     echo "Vai trò không hợp lệ.";
+                    exit;
             }
-        } else {
-            echo "Sai mật khẩu!";
         }
-    } else {
-        echo "Sai tên đăng nhập!";
     }
 
-    $stmt->close();
+    // Nếu đến đây là sai tên đăng nhập hoặc mật khẩu
+    header('Location: /HeThongChamSocThuCung/frontend/auth/login.php?error=1');
+    exit;
 }
 
 // Nếu muốn giữ lại form đăng nhập ở đây khi truy cập trực tiếp
@@ -52,6 +51,11 @@ if ($_SERVER["REQUEST_METHOD"] !== "POST") {
 ?>
     <form method="POST">
         <h2>Đăng nhập</h2>
+        <?php if (isset($_GET['error'])): ?>
+            <div style="color: red; margin-bottom: 10px; font-weight: bold;">
+                Sai tên đăng nhập hoặc mật khẩu!
+            </div>
+        <?php endif; ?>
         Tên đăng nhập: <input type="text" name="username" required><br>
         Mật khẩu: <input type="password" name="password" required><br>
         <input type="submit" value="Đăng nhập">

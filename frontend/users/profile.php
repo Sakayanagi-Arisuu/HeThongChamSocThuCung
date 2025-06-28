@@ -1,9 +1,9 @@
 <?php
 session_start();
-require_once "../../../includes/db.php";
+require_once "../../includes/db.php";
 
 if (!isset($_SESSION['username'])) {
-    header("Location: ../auth/login.php");
+    header("Location: ../../../frontend/auth/login.php");
     exit;
 }
 
@@ -13,7 +13,7 @@ $stmt->bind_param("s", $username);
 $stmt->execute();
 $user = $stmt->get_result()->fetch_assoc();
 
-// Cập nhật thông tin cá nhân
+// Update info
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_info'])) {
     $full_name = trim($_POST['full_name']);
     $contact_info = trim($_POST['contact_info']);
@@ -31,9 +31,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_info'])) {
     $stmt2->close();
 }
 
-// Xử lý upload avatar (AJAX)
+// Upload avatar (AJAX)
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['avatar'])) {
-    $uploadDir = '../../../uploads/avatars/';
+    $uploadDir = '../../uploads/avatars/';
     if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
     $file = $_FILES['avatar'];
     $fileExt = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
@@ -42,7 +42,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['avatar'])) {
         $newName = $username . '_' . time() . '.' . $fileExt;
         $savePath = $uploadDir . $newName;
         if (move_uploaded_file($file['tmp_name'], $savePath)) {
-            // Lưu đường dẫn tuyệt đối từ gốc web (bắt đầu bằng '/')
             $relPath = '/HeThongChamSocThuCung/uploads/avatars/' . $newName;
             $stmt = $conn->prepare("UPDATE users SET avatar=? WHERE username=?");
             $stmt->bind_param("ss", $relPath, $username);
@@ -58,9 +57,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['avatar'])) {
     }
 }
 
-// Lấy avatar: dùng tuyệt đối, luôn đúng cho mọi trang
 $avatar = !empty($user['avatar']) ? $user['avatar'] : '/HeThongChamSocThuCung/images/download.jpg';
 ?>
+<!-- HTML phần dưới giữ nguyên -->
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>

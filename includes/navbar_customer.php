@@ -87,16 +87,16 @@ $user_fullname = $_SESSION['full_name'] ?? $_SESSION['username'] ?? 'Khách hàn
         <a href="/HeThongChamSocThuCung/frontend/customer/customer_dashboard.php" <?= ($active_menu ?? '')=='home' ? 'class="active"' : '' ?>>Trang chủ</a>
         <a href="#" <?= ($active_menu ?? '')=='about' ? 'class="active"' : '' ?>>Về chúng tôi</a>
         <a href="#" <?= ($active_menu ?? '')=='hospital' ? 'class="active"' : '' ?>>Bệnh viện thú y</a>
-        <a href="#" <?= ($active_menu ?? '')=='products' ? 'class="active"' : '' ?>>Danh mục sản phẩm</a>
+        <a href="\HeThongChamSocThuCung\frontend\products\products_list.php" <?= ($active_menu ?? '')=='products' ? 'class="active"' : '' ?>>Danh mục sản phẩm</a>
         <a href="/HeThongChamSocThuCung/frontend/customer/my_pets.php" <?= ($active_menu ?? '')=='pets' ? 'class="active"' : '' ?>>Thú cưng của tôi</a>
-        <a href="/HeThongChamSocThuCung/frontend/customer/appointments/list_appointments.php" <?= ($active_menu ?? '')=='appointments' ? 'class="active"' : '' ?>>Danh sách lịch hẹn</a>
+        <a href="/HeThongChamSocThuCung/frontend/appointments/appointments.php" <?= ($active_menu ?? '')=='appointments' ? 'class="active"' : '' ?>>Danh sách lịch hẹn</a>
     </div>
     <div class="navbar-customer-user" onclick="toggleUserDropdown(event)">
         <!-- Thêm ?v=<?= time() ?> để luôn cập nhật ảnh mới khi thay đổi -->
         <img src="<?= htmlspecialchars($avatar) ?>?v=<?= time() ?>" alt="avatar">
         <span><?= htmlspecialchars($user_fullname) ?></span>
         <div id="navbarUserDropdown" class="navbar-user-dropdown">
-            <a href="/HeThongChamSocThuCung/backend/api/dashboards/customer_dashboard.php">Thông tin cá nhân</a>
+            <a href="/HeThongChamSocThuCung/frontend/users/profile.php">Thông tin cá nhân</a>
             <a href="/HeThongChamSocThuCung/backend/api/auth/logout.php">Đăng xuất</a>
         </div>
     </div>

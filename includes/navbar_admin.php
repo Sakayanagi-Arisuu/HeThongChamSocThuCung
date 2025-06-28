@@ -85,15 +85,15 @@ $user_fullname = $_SESSION['full_name'] ?? $_SESSION['username'] ?? 'Khách hàn
         <a href="/HeThongChamSocThuCung/frontend/customer/customer_dashboard.php" <?= ($active_menu ?? '')=='home' ? 'class="active"' : '' ?>>Trang chủ</a>
         <a href="#" <?= ($active_menu ?? '')=='about' ? 'class="active"' : '' ?>>Về chúng tôi</a>
         <a href="#" <?= ($active_menu ?? '')=='hospital' ? 'class="active"' : '' ?>>Bệnh viện thú y</a>
-        <a href="#" <?= ($active_menu ?? '')=='products' ? 'class="active"' : '' ?>>Quản lý sản phẩm</a>
+        <a href="\HeThongChamSocThuCung\frontend\admin\products_manage.php" <?= ($active_menu ?? '')=='products' ? 'class="active"' : '' ?>>Quản lý sản phẩm</a>
         <a href="/HeThongChamSocThuCung/frontend/customer/my_pets.php" <?= ($active_menu ?? '')=='pets' ? 'class="active"' : '' ?>>Thống kê doanh thu</a>
-        <a href="/HeThongChamSocThuCung/frontend/customer/appointments/list_appointments.php" <?= ($active_menu ?? '')=='appointments' ? 'class="active"' : '' ?>>Quản lý người dùng</a>
+        <a href="/HeThongChamSocThuCung/frontend/admin/users_management.php" <?= ($active_menu ?? '')=='appointments' ? 'class="active"' : '' ?>>Quản lý người dùng</a>
     </div>
     <div class="navbar-customer-user" onclick="toggleUserDropdown(event)">
         <img src="<?= htmlspecialchars($avatar) ?>" alt="avatar">
         <span><?= htmlspecialchars($user_fullname) ?></span>
         <div id="navbarUserDropdown" class="navbar-user-dropdown">
-            <a href="/HeThongChamSocThuCung/frontend/customer/profile.php">Thông tin cá nhân</a>
+            <a href="/HeThongChamSocThuCung/frontend/users/profile.php">Thông tin cá nhân</a>
             <a href="/HeThongChamSocThuCung/backend/api/auth/logout.php">Đăng xuất</a>
         </div>
     </div>

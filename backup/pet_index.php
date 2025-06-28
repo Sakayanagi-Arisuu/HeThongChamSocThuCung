@@ -2,12 +2,6 @@
 require_once '../../../../includes/db.php';
 session_start();
 
-// Kiểm tra nếu không đăng nhập hoặc không phải admin thì chặn
-// if (!isset($_SESSION['username']))  {
-//     header('Location: ../../../auth/login.php');
-//     exit;
-// }
-
 $sql = "SELECT pets.*, users.username FROM pets INNER JOIN users ON pets.owner_id = users.id";
 $result = $conn->query($sql);
 ?>

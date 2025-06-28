@@ -1,12 +1,13 @@
 <?php
-// Đảm bảo session đã khởi tạo trước khi include file này!
 if (!isset($_SESSION)) session_start();
 
-// Lấy avatar, tên đầy đủ
-$avatar = !empty($_SESSION['avatar']) ? $_SESSION['avatar'] : 'https://ui-avatars.com/api/?name=' . urlencode($_SESSION['full_name'] ?? $_SESSION['username'] ?? 'User');
-$user_fullname = $_SESSION['full_name'] ?? $_SESSION['username'] ?? 'Khách hàng';
+$avatar = !empty($_SESSION['avatar'])
+    ? $_SESSION['avatar']
+    : 'https://ui-avatars.com/api/?name=' . urlencode($_SESSION['full_name'] ?? $_SESSION['username'] ?? 'User');
+$user_fullname = $_SESSION['full_name'] ?? $_SESSION['username'] ?? 'Bác sĩ';
 ?>
 <style>
+/* Giữ lại CSS giống customer, hoặc extract ra file chung nếu muốn */
 .navbar-customer {
     background: #0099cc;
     padding: 0;
@@ -82,17 +83,18 @@ $user_fullname = $_SESSION['full_name'] ?? $_SESSION['username'] ?? 'Khách hàn
 
 <div class="navbar-customer">
     <div class="navbar-customer-menu">
-        <a href="/HeThongChamSocThuCung/frontend/customer/customer_dashboard.php" <?= ($active_menu ?? '')=='home' ? 'class="active"' : '' ?>>Trang chủ</a>
+        <a href="/HeThongChamSocThuCung/frontend/doctor/doctor_dashboard.php" <?= ($active_menu ?? '')=='home' ? 'class="active"' : '' ?>>Trang chủ</a>
         <a href="#" <?= ($active_menu ?? '')=='about' ? 'class="active"' : '' ?>>Về chúng tôi</a>
         <a href="#" <?= ($active_menu ?? '')=='hospital' ? 'class="active"' : '' ?>>Bệnh viện thú y</a>
         <a href="#" <?= ($active_menu ?? '')=='products' ? 'class="active"' : '' ?>>Danh mục sản phẩm</a>
-        <a href="/HeThongChamSocThuCung/frontend/customer/my_pets.php" <?= ($active_menu ?? '')=='pets' ? 'class="active"' : '' ?>>Xem lịch khám</a>
+        <a href="/HeThongChamSocThuCung/frontend/doctor/schedule.php" <?= ($active_menu ?? '')=='appointments' ? 'class="active"' : '' ?>>Lịch khám</a>
     </div>
     <div class="navbar-customer-user" onclick="toggleUserDropdown(event)">
-        <img src="<?= htmlspecialchars($avatar) ?>" alt="avatar">
+        <!-- ?v=<?= time() ?> để auto reload ảnh mới -->
+        <img src="<?= htmlspecialchars($avatar) ?>?v=<?= time() ?>" alt="avatar">
         <span><?= htmlspecialchars($user_fullname) ?></span>
         <div id="navbarUserDropdown" class="navbar-user-dropdown">
-            <a href="/HeThongChamSocThuCung/frontend/customer/profile.php">Thông tin cá nhân</a>
+            <a href="/HeThongChamSocThuCung/frontend/users/profile.php">Thông tin cá nhân</a>
             <a href="/HeThongChamSocThuCung/backend/api/auth/logout.php">Đăng xuất</a>
         </div>
     </div>

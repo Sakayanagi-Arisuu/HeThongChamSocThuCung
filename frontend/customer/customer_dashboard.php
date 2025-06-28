@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION['username'])) {
-    header("Location: /HeThongChamSocThuCung/backend/api/auth/login.php");
+    header("Location: /HeThongChamSocThuCung/frontend/auth/login.php");
     exit;
 }
 $page_title = "Pet Care Services";

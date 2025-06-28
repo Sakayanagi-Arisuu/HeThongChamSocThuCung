@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS appointments (
     schedule_time DATETIME,
     status ENUM('Đã đặt', 'Đã khám', 'Đã hủy', 'Check-in'),
     reason TEXT,
-    FOREIGN KEY (pet_id) REFERENCES pets(id),
+    FOREIGN KEY (pet_id) REFERENCES pets(id) ON DELETE CASCADE,
     FOREIGN KEY (customer_id) REFERENCES users(id),
     FOREIGN KEY (doctor_id) REFERENCES users(id)
 );

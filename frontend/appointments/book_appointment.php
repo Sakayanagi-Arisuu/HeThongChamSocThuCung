@@ -37,7 +37,7 @@ include '../../includes/header.php';  // HEADER + NAVBAR
         <div class="desc-green">
             Đặt lịch trước để chúng tôi phục vụ bạn tốt hơn
         </div>
-        <form class="form-book" method="POST" action="../../backend/api/customer/appointments/create_appointment.php">
+        <form id="book-form" class="form-book" method="POST">
             <label>Chọn thú cưng</label>
             <select name="pet_id" required>
                 <option value="">-- Chọn thú cưng --</option>
@@ -79,5 +79,26 @@ include '../../includes/header.php';  // HEADER + NAVBAR
 
     <?php include '../../includes/category.php'; // SIDEBAR phải ?>
 </div>
+
+<script>
+document.getElementById('book-form').onsubmit = function(e) {
+    e.preventDefault();
+    const formData = new FormData(this);
+    fetch('../../backend/api/customer/appointments/api_create_appointment.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+        if(data.success) {
+            alert("Đặt lịch thành công!");
+            window.location.href = "appointments.php";
+        } else {
+            alert(data.error || "Có lỗi xảy ra!");
+        }
+    })
+    .catch(() => alert("Lỗi kết nối máy chủ!"));
+};
+</script>
 
 <?php include '../../includes/footer.php'; // FOOTER ?>

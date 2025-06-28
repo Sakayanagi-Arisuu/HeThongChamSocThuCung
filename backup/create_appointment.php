@@ -28,7 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $stmt->bind_param("iisssss", $pet_id, $user_id, $phone, $doctor_id, $schedule_time, $service, $reason);
 
     if ($stmt->execute()) {
-        echo "<script>alert('Đặt lịch thành công!'); window.location.href='../../frontend/customer/index_appointment.php';</script>";
+        echo "<script>alert('Đặt lịch thành công!'); window.location.href='../../../../frontend/appointments/appointments.php';</script>";
         exit;
     } else {
         echo "Lỗi: " . $stmt->error;
