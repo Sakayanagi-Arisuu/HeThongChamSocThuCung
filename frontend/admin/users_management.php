@@ -166,8 +166,8 @@ include '../../includes/navbar_admin.php';
       <label>Vai trò:
         <select name="role" required>
           <option value="admin">Admin</option>
-          <option value="bác sĩ">Bác sĩ</option>
-          <option value="khách hàng">Khách hàng</option>
+          <option value="doctor">Bác sĩ</option>
+          <option value="customer">Khách hàng</option>
         </select>
       </label>
       <label>Mật khẩu mới: <input type="password" name="password" autocomplete="new-password"></label>
@@ -177,6 +177,15 @@ include '../../includes/navbar_admin.php';
 </div>
 
 <script>
+function getRoleNameVi(role) {
+    switch(role) {
+        case 'admin': return 'Quản trị viên';
+        case 'doctor': return 'Bác sĩ';
+        case 'customer': return 'Khách hàng';
+        case 'guest': return 'Khách';
+        default: return role;
+    }
+}
 function openUserForm(mode, user = {}) {
     document.getElementById('user-form-modal').style.display = 'flex';
     document.getElementById('user-form-title').innerText = (mode === 'add') ? 'Thêm người dùng' : 'Sửa người dùng';
@@ -191,7 +200,7 @@ function openUserForm(mode, user = {}) {
     form.elements['id'].value = user.id || '';
     form.elements['username'].value = user.username || '';
     form.elements['full_name'].value = user.full_name || '';
-    form.elements['role'].value = user.role || 'khách hàng';
+    form.elements['role'].value = user.role || 'customer';
     form.elements['password'].value = '';
     // Nếu là edit thì disable username
     form.elements['username'].disabled = (mode === 'edit');
@@ -255,7 +264,7 @@ function loadUserTable() {
                     <td>${user.id}</td>
                     <td>${user.username}</td>
                     <td>${user.full_name || ''}</td>
-                    <td>${user.role}</td>
+                    <td>${getRoleNameVi(user.role)}</td>
                     <td>
                         <button type="button" class="action-btn action-edit" title="Sửa"
                           onclick='openUserForm("edit", ${JSON.stringify(user)})'>

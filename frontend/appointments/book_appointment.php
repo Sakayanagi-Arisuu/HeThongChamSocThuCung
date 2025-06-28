@@ -4,7 +4,7 @@ require_once "../../includes/db.php";
 $page_title = "Đặt lịch khám - Pet Care Services";
 
 if (!isset($_SESSION['username'])) {
-    echo "Truy cập bị từ chối.";
+    header("Location: /HeThongChamSocThuCung/frontend/auth/login.php");
     exit;
 }
 
@@ -22,7 +22,8 @@ $pets = $conn->query("SELECT id, name FROM pets WHERE owner_id = $user_id");
 // Lấy danh sách bác sĩ
 $doctors = $conn->query("SELECT id, username FROM users WHERE role = 'bác sĩ'");
 
-include '../../includes/header.php';  // HEADER + NAVBAR
+include '../../includes/header.php';
+include '../../includes/navbar_customer.php';
 ?>
 
 <div class="main-content">
@@ -101,4 +102,7 @@ document.getElementById('book-form').onsubmit = function(e) {
 };
 </script>
 
-<?php include '../../includes/footer.php'; // FOOTER ?>
+<?php
+
+include '../../includes/footer.php';
+?>

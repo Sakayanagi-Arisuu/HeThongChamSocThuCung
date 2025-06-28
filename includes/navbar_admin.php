@@ -82,11 +82,11 @@ $user_fullname = $_SESSION['full_name'] ?? $_SESSION['username'] ?? 'Khách hàn
 
 <div class="navbar-customer">
     <div class="navbar-customer-menu">
-        <a href="/HeThongChamSocThuCung/frontend/customer/customer_dashboard.php" <?= ($active_menu ?? '')=='home' ? 'class="active"' : '' ?>>Trang chủ</a>
+        <a href="/HeThongChamSocThuCung/frontend/admin/admin_dashboard.php" <?= ($active_menu ?? '')=='home' ? 'class="active"' : '' ?>>Trang chủ</a>
         <a href="#" <?= ($active_menu ?? '')=='about' ? 'class="active"' : '' ?>>Về chúng tôi</a>
         <a href="#" <?= ($active_menu ?? '')=='hospital' ? 'class="active"' : '' ?>>Bệnh viện thú y</a>
         <a href="\HeThongChamSocThuCung\frontend\admin\products_manage.php" <?= ($active_menu ?? '')=='products' ? 'class="active"' : '' ?>>Quản lý sản phẩm</a>
-        <a href="/HeThongChamSocThuCung/frontend/customer/my_pets.php" <?= ($active_menu ?? '')=='pets' ? 'class="active"' : '' ?>>Thống kê doanh thu</a>
+        <a href="\HeThongChamSocThuCung\frontend\admin\admin_revenue_report.php" <?= ($active_menu ?? '')=='pets' ? 'class="active"' : '' ?>>Thống kê doanh thu</a>
         <a href="/HeThongChamSocThuCung/frontend/admin/users_management.php" <?= ($active_menu ?? '')=='appointments' ? 'class="active"' : '' ?>>Quản lý người dùng</a>
     </div>
     <div class="navbar-customer-user" onclick="toggleUserDropdown(event)">

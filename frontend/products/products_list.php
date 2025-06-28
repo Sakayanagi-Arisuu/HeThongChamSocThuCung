@@ -2,7 +2,26 @@
 session_start();
 $page_title = "Mua sản phẩm thú cưng";
 include '../../includes/header.php';
-include '../../includes/navbar_customer.php'; // hoặc navbar_guest.php nếu chưa login
+
+// Kiểm tra session đăng nhập và vai trò
+if (!isset($_SESSION['role'])) {
+    include '../../includes/navbar_guest.php';
+} else {
+    switch ($_SESSION['role']) {
+        case 'customer':
+            include '../../includes/navbar_customer.php';
+            break;
+        case 'doctor':
+            include '../../includes/navbar_doctor.php';
+            break;
+        case 'admin':
+            include '../../includes/navbar_admin.php';
+            break;
+        default:
+            include '../../includes/navbar_guest.php';
+            break;
+    }
+}
 ?>
 <style>
 #products-catalog { margin: 40px auto; max-width: 1100px; display: flex; flex-wrap: wrap; gap: 28px;}
@@ -49,9 +68,23 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('products-catalog').innerHTML = html || "<p>Không có sản phẩm.</p>";
     });
 });
-function addToCart(id) {
-    // Demo: gửi lên API (chưa cần code giỏ hàng thật cũng được)
-    alert("Đã thêm sản phẩm #" + id + " vào giỏ hàng!");
-    // fetch('/HeThongChamSocThuCung/backend/api/cart/add_to_cart.php', {...})
+
+function addToCart(product_id) {
+    fetch('/HeThongChamSocThuCung/backend/api/products/cart/add_to_cart.php', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: 'product_id=' + product_id
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            alert('Đã thêm vào giỏ!');
+        } else {
+            alert(data.error || 'Lỗi!');
+        }
+    });
 }
 </script>
+<?php
+include '../../includes/footer.php';
+?>

@@ -67,7 +67,7 @@
         <a href="/HeThongChamSocThuCung/index.php" <?= ($active_menu ?? '')=='home' ? 'class="active"' : '' ?>>Trang chủ</a>
         <a href="#" <?= ($active_menu ?? '')=='about' ? 'class="active"' : '' ?>>Về chúng tôi</a>
         <a href="#" <?= ($active_menu ?? '')=='hospital' ? 'class="active"' : '' ?>>Bệnh viện thú y</a>
-        <a href="#" <?= ($active_menu ?? '')=='products' ? 'class="active"' : '' ?>>Danh mục sản phẩm</a>
+        <a href="\HeThongChamSocThuCung\frontend\products\products_list.php" <?= ($active_menu ?? '')=='products' ? 'class="active"' : '' ?>>Danh mục sản phẩm</a>
     </div>
     <div class="navbar-guess-auth">
         <a href="/HeThongChamSocThuCung/frontend/auth/login.php">Đăng nhập</a>

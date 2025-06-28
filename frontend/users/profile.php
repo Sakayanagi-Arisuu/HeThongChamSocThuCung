@@ -13,6 +13,17 @@ $stmt->bind_param("s", $username);
 $stmt->execute();
 $user = $stmt->get_result()->fetch_assoc();
 
+// Hàm dịch vai trò sang tiếng Việt
+function roleToVietnamese($role) {
+    switch ($role) {
+        case 'admin': return 'Quản trị viên';
+        case 'doctor': return 'Bác sĩ';
+        case 'customer': return 'Khách hàng';
+        case 'guest': return 'Khách';
+        default: return $role;
+    }
+}
+
 // Update info
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_info'])) {
     $full_name = trim($_POST['full_name']);
@@ -59,7 +70,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['avatar'])) {
 
 $avatar = !empty($user['avatar']) ? $user['avatar'] : '/HeThongChamSocThuCung/images/download.jpg';
 ?>
-<!-- HTML phần dưới giữ nguyên -->
 
 <!DOCTYPE html>
 <html lang="vi">
@@ -104,7 +114,7 @@ $avatar = !empty($user['avatar']) ? $user['avatar'] : '/HeThongChamSocThuCung/im
             <label>Email/Số điện thoại liên hệ</label>
             <input type="text" name="contact_info" value="<?= htmlspecialchars($user['contact_info']) ?>" required>
             <label>Vai trò</label>
-            <input type="text" value="<?= htmlspecialchars($user['role']) ?>" readonly>
+            <input type="text" value="<?= roleToVietnamese($user['role']) ?>" readonly>
             <button type="submit" name="update_info">Lưu thông tin</button>
             <button type="button" class="back-btn" onclick="window.history.back();">Trở về</button>
         </form>

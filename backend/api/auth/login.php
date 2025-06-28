@@ -16,6 +16,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $user = $result->fetch_assoc();
         if (password_verify($inputPassword, $user['password'])) {
             // Đăng nhập thành công
+            $_SESSION['user_id'] = $user['id'];
             $_SESSION['username'] = $user['username'];
             $_SESSION['role'] = $user['role'];
             $_SESSION['avatar'] = $user['avatar'];
@@ -28,10 +29,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 case 'admin':
                     header('Location: ../../../frontend/admin/admin_dashboard.php');
                     exit;
-                case 'bác sĩ':
+                case 'doctor':
                     header('Location: ../../../frontend/doctor/doctor_dashboard.php');
                     exit;
-                case 'khách hàng':
+                case 'customer':
                     header('Location: ../../../frontend/customer/customer_dashboard.php');
                     exit;
                 default:

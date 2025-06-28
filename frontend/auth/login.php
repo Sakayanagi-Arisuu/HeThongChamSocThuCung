@@ -90,7 +90,7 @@
 <body>
     <?php
     include __DIR__ . '/../../includes/header.php';
-    include __DIR__ . '/../../includes/navbar_guess.php';
+    include __DIR__ . '/../../includes/navbar_guest.php';
     ?>
 
     <?php if (isset($_GET['error'])): ?>
@@ -107,4 +107,8 @@
         </form>
     </div>
 </body>
+<?php
+
+include '../../includes/footer.php';
+?>
 </html>

@@ -1,6 +1,6 @@
 <?php
 session_start();
-if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'bác sĩ') {
+if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'doctor') {
     header("Location: /HeThongChamSocThuCung/frontend/auth/login.php");
     exit;
 }
@@ -228,3 +228,7 @@ document.getElementById('medical-record-form').onsubmit = function(e) {
   .catch(()=>alert('Lỗi kết nối!'));
 };
 </script>
+<?php
+
+include '../../includes/footer.php';
+?>

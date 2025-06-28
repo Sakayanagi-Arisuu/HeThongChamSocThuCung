@@ -44,6 +44,35 @@ include '../../includes/navbar_customer.php';
 #appointments-table .add-pet-link:hover {
     color: #e64a19;
 }
+/* Popup thanh toán QR */
+#payment-modal {
+    display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; z-index:999;
+    background:rgba(0,0,0,0.14); align-items:center; justify-content:center;
+}
+#payment-modal .payment-popup {
+    background:#fff; border-radius:13px; box-shadow:0 3px 16px #0002;
+    padding:34px 30px 22px 30px; min-width:300px; max-width:96vw; text-align:center; position:relative;
+    animation:popupOpen .24s;
+}
+@keyframes popupOpen {
+    from {transform:scale(0.96); opacity:0;}
+    to {transform:scale(1); opacity:1;}
+}
+#payment-modal .close-btn {
+    position:absolute; top:12px; right:14px; border:none; background:none; font-size:25px; color:#bbb; cursor:pointer;
+}
+#payment-modal img {
+    width:180px; border-radius:10px; margin:16px 0 12px 0; border:2px solid #e3e7ee;
+}
+#payment-modal .btn-action {
+    margin-top:12px;
+    background: #43a047; color:#fff;
+    font-weight:600; min-width:130px;
+}
+#payment-modal .btn-action:hover {
+    background:#2b8137;
+    color:#fff;
+}
 </style>
 
 <div class="main-content">
@@ -55,9 +84,47 @@ include '../../includes/navbar_customer.php';
     </div>
 </div>
 
+<!-- Popup thanh toán QR -->
+<div id="payment-modal">
+  <div class="payment-popup">
+    <button onclick="closePaymentModal()" class="close-btn">&times;</button>
+    <h3 style="margin:10px 0 14px 0; color:#29b6f6; font-size:21px;">Vui lòng quét mã QR để thanh toán</h3>
+    <img id="qrImage" src="/HeThongChamSocThuCung/images/qr_code.png" alt="QR Code">
+    <div>
+      <button id="btnPaid" class="btn-action">Đã thanh toán</button>
+    </div>
+  </div>
+</div>
+
 <script>
+let currentPaymentAppointmentId = null;
+function openPaymentModal(appointmentId) {
+    currentPaymentAppointmentId = appointmentId;
+    document.getElementById('payment-modal').style.display = 'flex';
+    // Nếu muốn đổi QR theo lịch, đổi src ở đây
+    // document.getElementById('qrImage').src = '/HeThongChamSocThuCung/images/qr-' + appointmentId + '.png';
+}
+function closePaymentModal() {
+    document.getElementById('payment-modal').style.display = 'none';
+    currentPaymentAppointmentId = null;
+}
 document.addEventListener('DOMContentLoaded', function() {
     loadAppointmentsTable();
+    document.getElementById('btnPaid').onclick = function() {
+        if (!currentPaymentAppointmentId) return;
+        fetch('/HeThongChamSocThuCung/backend/api/customer/appointments/api_paid_appointment.php', {
+            method:'POST',
+            body: new URLSearchParams({id: currentPaymentAppointmentId})
+        }).then(res=>res.json()).then(data=>{
+            if(data.success) {
+                closePaymentModal();
+                loadAppointmentsTable();
+                alert("Thanh toán thành công!");
+            } else {
+                alert(data.error||'Lỗi cập nhật!');
+            }
+        });
+    }
 });
 
 function loadAppointmentsTable() {
@@ -103,8 +170,11 @@ function loadAppointmentsTable() {
                 if (row.status === 'Đã hủy') {
                     html += `<button class="btn-delete" onclick="deleteAppointment(${row.id})">Xóa</button>`;
                 }
-                if (row.status === 'Đã khám') {
-                    html += `<a href="payment.php?appointment_id=${row.id}" class="btn-action">Thanh toán</a>`;
+                if (row.status === 'Đã khám' && (!row.payment_status || row.payment_status==='Chưa thanh toán')) {
+                    html += `<button class="btn-action" onclick="openPaymentModal(${row.id})">Thanh toán</button>`;
+                }
+                if (row.status === 'Đã khám' && row.payment_status==='Đã thanh toán') {
+                    html += `<span style="color:#388e3c;font-weight:bold;">Đã thanh toán</span>`;
                 }
                 html += `</td></tr>`;
             });
@@ -141,3 +211,6 @@ function checkInAppointment(id) {
     });
 }
 </script>
+<?php
+include '../../includes/footer.php';
+?>

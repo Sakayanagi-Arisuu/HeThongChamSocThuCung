@@ -3,7 +3,7 @@ require_once '../../../../includes/db.php';
 session_start();
 header('Content-Type: application/json');
 
-if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'bác sĩ') {
+if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'doctor') {
     echo json_encode(['success'=>false, 'error'=>'Bạn không có quyền!']); exit;
 }
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -43,12 +43,12 @@ $stmt = $conn->prepare("INSERT INTO medical_records (appointment_id, diagnosis, 
 $stmt->bind_param("isss", $appointment_id, $diagnosis, $treatment, $notes);
 
 if ($stmt->execute()) {
-    // Update status
-    $conn->query("UPDATE appointments SET status='Đã khám' WHERE id = $appointment_id");
-    // Thêm dòng thanh toán
-    $stmtPay = $conn->prepare("INSERT INTO payments (appointment_id, amount, status) VALUES (?, ?, 'Chưa thanh toán')");
-    $stmtPay->bind_param("id", $appointment_id, $fee);
-    $stmtPay->execute();
+    // Update status, fee, và trạng thái thanh toán trong bảng appointments
+    $stmt2 = $conn->prepare("UPDATE appointments SET status='Đã khám', fee=?, payment_status='Chưa thanh toán' WHERE id=?");
+    $stmt2->bind_param("di", $fee, $appointment_id);
+    $stmt2->execute();
+    $stmt2->close();
+
     echo json_encode(['success'=>true]);
 } else {
     echo json_encode(['success'=>false, 'error'=>$stmt->error]);
