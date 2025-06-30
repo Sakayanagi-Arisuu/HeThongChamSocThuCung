@@ -31,7 +31,7 @@
         .login-container { 
             max-width: 340px; 
             margin: 40px auto; 
-            background: url('https://i.imgur.com/h35JdL3.png') no-repeat center; 
+            background: url('/HeThongChamSocThuCung/images/login.jpg') no-repeat center;
             background-size: cover; 
             padding: 45px 25px 35px 25px; 
             border-radius: 14px; 

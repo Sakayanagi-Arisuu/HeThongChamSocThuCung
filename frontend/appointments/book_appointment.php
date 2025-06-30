@@ -20,7 +20,7 @@ $user_id = $user_result->fetch_assoc()['id'];
 $pets = $conn->query("SELECT id, name FROM pets WHERE owner_id = $user_id");
 
 // Lấy danh sách bác sĩ
-$doctors = $conn->query("SELECT id, username FROM users WHERE role = 'bác sĩ'");
+$doctors = $conn->query("SELECT id, username FROM users WHERE role = 'doctor'");
 
 include '../../includes/header.php';
 include '../../includes/navbar_customer.php';
@@ -33,7 +33,7 @@ include '../../includes/navbar_customer.php';
         <div class="desc">
             <span style="font-weight:bold; color:#444;">Dịch Vụ Chăm Sóc Thú Cưng PET</span> rất hân hạnh đón tiếp quý khách hàng tới thăm khám và điều trị cho thú cưng.
             Quý khách có thể đặt lịch khám trực tiếp qua điện thoại với số hotline:
-            <span class="hotline">0999888123</span> hoặc <span class="online">đặt lịch khám online</span> trên website.
+            <span class="hotline">099998888</span> hoặc <span class="online">đặt lịch khám online</span> trên website.
         </div>
         <div class="desc-green">
             Đặt lịch trước để chúng tôi phục vụ bạn tốt hơn

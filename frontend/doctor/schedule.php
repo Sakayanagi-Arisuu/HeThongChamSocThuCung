@@ -176,7 +176,7 @@ $result = $stmt->get_result();
       <textarea name="notes" rows="2"></textarea>
       <div id="fee-input-box" style="display:none;">
         <label>Phí dịch vụ (VNĐ):</label>
-        <input type="number" name="fee" min="0" step="1000" id="fee-input">
+        <input type="number" name="fee" min="0" step="100000" id="fee-input">
       </div>
       <button type="submit">Lưu hồ sơ khám</button>
     </form>

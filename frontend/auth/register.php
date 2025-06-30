@@ -13,7 +13,7 @@
         .header .top-info { text-align: right; font-size: 13px; color: #333; }
         .navbar { background: #0077a3; padding: 10px 20px; }
         .navbar a { color: white; text-decoration: none; margin-right: 15px; font-weight: bold; }
-        .register-container { max-width: 320px; margin: 60px auto; background: url('https://i.imgur.com/h35JdL3.png') no-repeat center; background-size: cover; padding: 40px 20px; border-radius: 12px; box-shadow: 0 0 10px rgba(0,0,0,0.1); position: relative; }
+        .register-container { max-width: 320px; margin: 60px auto; background: url('/HeThongChamSocThuCung/images/login.jpg') no-repeat center; background-size: cover; padding: 40px 20px; border-radius: 12px; box-shadow: 0 0 10px rgba(0,0,0,0.1); position: relative; }
         .register-container::before { content: ""; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(255,255,255,0.85); border-radius: 12px; }
         .register-form { position: relative; z-index: 1; }
         .register-form h2 { text-align: center; margin-bottom: 20px; color: #0077a3; }
@@ -35,7 +35,7 @@
 <body>
     <?php
     include __DIR__ . '/../../includes/header.php';
-    include __DIR__ . '/../../includes/navbar_guess.php';
+    include __DIR__ . '/../../includes/navbar_guest.php';
     ?>
 
     <div class="register-container">

@@ -1,41 +1,43 @@
 <style>
-.navbar-guess {
-    background: #0077a3;
-    padding: 10px 32px;
+.navbar-guest {
+    background: #0099cc;
+    padding: 0;
+    min-height: 48px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    min-height: 48px;
+    justify-content: center;
     position: relative;
+    box-shadow: 0 2px 8px #0099cc22;
 }
-.navbar-guess-menu {
+.navbar-guest-menu {
     display: flex;
     align-items: center;
     flex: 1;
-    justify-content: space-evenly;  /* CHÍNH LÀ DÒNG NÀY */
+    justify-content: center;
 }
-.navbar-guess-menu a {
-    color: #fff;
+.navbar-guest-menu a {
+    color: white;
     text-decoration: none;
+    margin: 0 14px;
     font-weight: bold;
     font-size: 16px;
-    padding: 12px 26px;  /* Tăng padding ngang cho đều */
+    padding: 14px 0 13px 0;
     border-bottom: 3px solid transparent;
     transition: border-color 0.2s;
-    text-align: center;
-    flex: 1; /* Mỗi menu chiếm đều không gian */
 }
-.navbar-guess-menu a.active,
-.navbar-guess-menu a:hover {
+.navbar-guest-menu a.active,
+.navbar-guest-menu a:hover {
     border-bottom: 3px solid #fff;
 }
-.navbar-guess-auth {
+.navbar-guest-auth {
     display: flex;
     align-items: center;
+    position: absolute;
+    right: 28px;
+    top: 4px;
     gap: 12px;
-    margin-left: 0px; /* cách ra so với menu */
 }
-.navbar-guess-auth a {
+.navbar-guest-auth a {
     text-decoration: none;
     font-weight: bold;
     border-radius: 20px;
@@ -43,34 +45,35 @@
     font-size: 15px;
     border: none;
     background: #fff;
-    color: #0077a3;
+    color: #0099cc;
     transition: background 0.15s, color 0.15s;
-    box-shadow: 0 2px 8px #0077a322;
+    box-shadow: 0 2px 8px #0099cc22;
+    margin: 0;
 }
-.navbar-guess-auth a + a {
+.navbar-guest-auth a + a {
     background: #00bbff;
     color: #fff;
 }
-.navbar-guess-auth a:hover {
+.navbar-guest-auth a:hover {
     background: #e6f4fa;
     color: #005f87;
 }
-.navbar-guess-auth a + a:hover {
+.navbar-guest-auth a + a:hover {
     background: #0077a3;
     color: #fff;
 }
 </style>
 
-
-<div class="navbar-guess">
-    <div class="navbar-guess-menu">
-        <a href="/HeThongChamSocThuCung/index.php" <?= ($active_menu ?? '')=='home' ? 'class="active"' : '' ?>>Trang chủ</a>
-        <a href="#" <?= ($active_menu ?? '')=='about' ? 'class="active"' : '' ?>>Về chúng tôi</a>
-        <a href="#" <?= ($active_menu ?? '')=='hospital' ? 'class="active"' : '' ?>>Bệnh viện thú y</a>
-        <a href="\HeThongChamSocThuCung\frontend\products\products_list.php" <?= ($active_menu ?? '')=='products' ? 'class="active"' : '' ?>>Danh mục sản phẩm</a>
+<div class="navbar-guest">
+    <div class="navbar-guest-menu">
+        <a href="/HeThongChamSocThuCung/frontend/dashboards/dashboard.php" <?= ($active_menu ?? '')=='home' ? 'class="active"' : '' ?>>Trang chủ</a>
+        <a href="/HeThongChamSocThuCung/frontend/dashboards/about_us.php" <?= ($active_menu ?? '')=='about' ? 'class="active"' : '' ?>>Về chúng tôi</a>
+        <a href="/HeThongChamSocThuCung/frontend/products/products_list.php" <?= ($active_menu ?? '')=='products' ? 'class="active"' : '' ?>>Danh mục sản phẩm</a>
+        <a href="/HeThongChamSocThuCung/frontend/customer/my_pets.php" <?= ($active_menu ?? '')=='pets' ? 'class="active"' : '' ?>>Thú cưng của tôi</a>
+        <a href="/HeThongChamSocThuCung/frontend/appointments/appointments.php" <?= ($active_menu ?? '')=='appointments' ? 'class="active"' : '' ?>>Danh sách lịch hẹn</a>
     </div>
-    <div class="navbar-guess-auth">
+    <div class="navbar-guest-auth">
         <a href="/HeThongChamSocThuCung/frontend/auth/login.php">Đăng nhập</a>
-        <a href="/HeThongChamSocThuCung/frontend/auth/register.php" style="background: #00bbff; color:#fff;">Đăng ký</a>
+        <a href="/HeThongChamSocThuCung/frontend/auth/register.php">Đăng ký</a>
     </div>
 </div>

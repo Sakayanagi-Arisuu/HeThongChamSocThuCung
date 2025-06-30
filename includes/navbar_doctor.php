@@ -83,10 +83,9 @@ $user_fullname = $_SESSION['full_name'] ?? $_SESSION['username'] ?? 'Bác sĩ';
 
 <div class="navbar-customer">
     <div class="navbar-customer-menu">
-        <a href="/HeThongChamSocThuCung/frontend/doctor/doctor_dashboard.php" <?= ($active_menu ?? '')=='home' ? 'class="active"' : '' ?>>Trang chủ</a>
-        <a href="#" <?= ($active_menu ?? '')=='about' ? 'class="active"' : '' ?>>Về chúng tôi</a>
-        <a href="#" <?= ($active_menu ?? '')=='hospital' ? 'class="active"' : '' ?>>Bệnh viện thú y</a>
-        <a href="#" <?= ($active_menu ?? '')=='products' ? 'class="active"' : '' ?>>Danh mục sản phẩm</a>
+        <a href="/HeThongChamSocThuCung/frontend/dashboards/dashboard.php" <?= ($active_menu ?? '')=='home' ? 'class="active"' : '' ?>>Trang chủ</a>
+        <a href="\HeThongChamSocThuCung\frontend\dashboards\about_us.php" <?= ($active_menu ?? '')=='about' ? 'class="active"' : '' ?>>Về chúng tôi</a>
+        <a href="\HeThongChamSocThuCung\frontend\products\products_list.php" <?= ($active_menu ?? '')=='products' ? 'class="active"' : '' ?>>Danh mục sản phẩm</a>
         <a href="/HeThongChamSocThuCung/frontend/doctor/schedule.php" <?= ($active_menu ?? '')=='appointments' ? 'class="active"' : '' ?>>Lịch khám</a>
     </div>
     <div class="navbar-customer-user" onclick="toggleUserDropdown(event)">

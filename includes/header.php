@@ -160,18 +160,16 @@ $role = $_SESSION['role'] ?? 'guest';
                     <span style="font-weight:bold; font-size:15px;">7:00 AM - 7:00 PM</span>
                 </span>
             </span>
-            <?php if ($role == 'customer'): ?>
+            <?php if ($role == 'customer' || $role == 'guest'): ?>
             <span>
                 <img src="https://img.icons8.com/ios-filled/22/0099cc/calendar--v1.png" style="vertical-align: middle;">
                 <a href="\HeThongChamSocThuCung\frontend\appointments\book_appointment.php" class="datlich">ĐẶT LỊCH HẸN</a>
             </span>
-            <?php elseif ($role == 'doctor'): ?>
-            <!-- Doctor không có nút đặt lịch hẹn -->
             <?php endif; ?>
             <?php if ($role == 'customer' || $role == 'doctor'): ?>
             <span>
-                <a href="\HeThongChamSocThuCung\frontend\customer\cart.php" class="datlich" style="background:#33b7ff;">
-                    GIỎ HÀNG / 0đ
+                <a href="\HeThongChamSocThuCung\frontend\products\cart.php" class="datlich" style="background:#33b7ff;">
+                    GIỎ HÀNG
                     <img src="https://img.icons8.com/ios-glyphs/18/ffffff/shopping-cart.png" style="vertical-align: middle;">
                 </a>
             </span>

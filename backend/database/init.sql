@@ -61,6 +61,7 @@ CREATE TABLE IF NOT EXISTS medical_records (
     diagnosis TEXT,
     treatment TEXT,
     notes TEXT,
+    medical_records ADD COLUMN fee FLOAT DEFAULT 0;
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (appointment_id) REFERENCES appointments(id)
 );

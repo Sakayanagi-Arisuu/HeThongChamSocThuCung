@@ -24,8 +24,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if ($checkStmt->num_rows > 0) {
         echo json_encode(['success' => false, 'message' => 'Tên đăng nhập đã tồn tại. Vui lòng chọn tên khác.']);
     } else {
-        $stmt = $conn->prepare("INSERT INTO users (username, password, full_name, contact_info) VALUES (?, ?, ?, ?)");
-        $stmt->bind_param("ssss", $username, $hashedPassword, $fullName, $contactInfo);
+        // Thêm role là customer
+        $role = 'customer';
+        $stmt = $conn->prepare("INSERT INTO users (username, password, full_name, contact_info, role) VALUES (?, ?, ?, ?, ?)");
+        $stmt->bind_param("sssss", $username, $hashedPassword, $fullName, $contactInfo, $role);
 
         if ($stmt->execute()) {
             echo json_encode(['success' => true, 'message' => 'Đăng ký thành công!']);

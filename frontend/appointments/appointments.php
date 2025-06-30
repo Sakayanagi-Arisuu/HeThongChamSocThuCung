@@ -64,14 +64,36 @@ include '../../includes/navbar_customer.php';
 #payment-modal img {
     width:180px; border-radius:10px; margin:16px 0 12px 0; border:2px solid #e3e7ee;
 }
-#payment-modal .btn-action {
-    margin-top:12px;
-    background: #43a047; color:#fff;
-    font-weight:600; min-width:130px;
+/* Nút thanh toán giống cart */
+.checkout-btn {
+    background: #29b6f6;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: 600;
+    padding: 10px 28px;
+    margin-top: 18px;
+    cursor: pointer;
+    transition: background 0.16s;
+    box-shadow: 0 2px 8px #1aaee2a8;
+    min-width: 130px;
 }
-#payment-modal .btn-action:hover {
-    background:#2b8137;
-    color:#fff;
+.checkout-btn:hover {
+    background: #1976d2;
+}
+
+/* Popup xem medical record */
+#medical-record-modal {
+    display:none; position:fixed; top:0; left:0; width:100vw; height:100vh;
+    background:rgba(0,0,0,0.13); align-items:center; justify-content:center; z-index:9999;
+}
+#medical-record-modal .form-content {
+    background:#fff; border-radius:12px; box-shadow:0 2px 16px #0002; padding:28px 32px; min-width:340px; position:relative;
+    animation:popupOpen .23s;
+}
+#medical-record-modal .close-btn {
+    position:absolute;right:18px;top:14px;background:none;border:none;font-size:26px;color:#999;cursor:pointer;
 }
 </style>
 
@@ -91,7 +113,18 @@ include '../../includes/navbar_customer.php';
     <h3 style="margin:10px 0 14px 0; color:#29b6f6; font-size:21px;">Vui lòng quét mã QR để thanh toán</h3>
     <img id="qrImage" src="/HeThongChamSocThuCung/images/qr_code.png" alt="QR Code">
     <div>
-      <button id="btnPaid" class="btn-action">Đã thanh toán</button>
+      <button id="btnPaid" class="checkout-btn">Đã thanh toán</button>
+    </div>
+  </div>
+</div>
+
+<!-- Popup xem chi tiết medical record -->
+<div id="medical-record-modal">
+  <div class="form-content">
+    <button onclick="closeMedicalRecordModal()" class="close-btn">&times;</button>
+    <h3>Chi tiết hồ sơ khám bệnh</h3>
+    <div id="medical-record-detail" style="margin-top:10px; font-size:16px;">
+      <!-- Nội dung medical record sẽ được JS fill vào -->
     </div>
   </div>
 </div>
@@ -101,8 +134,6 @@ let currentPaymentAppointmentId = null;
 function openPaymentModal(appointmentId) {
     currentPaymentAppointmentId = appointmentId;
     document.getElementById('payment-modal').style.display = 'flex';
-    // Nếu muốn đổi QR theo lịch, đổi src ở đây
-    // document.getElementById('qrImage').src = '/HeThongChamSocThuCung/images/qr-' + appointmentId + '.png';
 }
 function closePaymentModal() {
     document.getElementById('payment-modal').style.display = 'none';
@@ -170,11 +201,15 @@ function loadAppointmentsTable() {
                 if (row.status === 'Đã hủy') {
                     html += `<button class="btn-delete" onclick="deleteAppointment(${row.id})">Xóa</button>`;
                 }
+                // Đã khám + chưa thanh toán: nút Thanh toán + Xem chi tiết
                 if (row.status === 'Đã khám' && (!row.payment_status || row.payment_status==='Chưa thanh toán')) {
-                    html += `<button class="btn-action" onclick="openPaymentModal(${row.id})">Thanh toán</button>`;
+                    html += `<button class="checkout-btn" onclick="openPaymentModal(${row.id})">Thanh toán</button>
+                             <button class="btn-action" onclick="openMedicalRecordModal(${row.id})">Xem chi tiết</button>`;
                 }
+                // Đã khám + đã thanh toán: chỉ hiện trạng thái + nút Xem chi tiết
                 if (row.status === 'Đã khám' && row.payment_status==='Đã thanh toán') {
-                    html += `<span style="color:#388e3c;font-weight:bold;">Đã thanh toán</span>`;
+                    html += `<span style="color:#388e3c;font-weight:bold;">Đã thanh toán</span>
+                             <button class="btn-action" onclick="openMedicalRecordModal(${row.id})">Xem chi tiết</button>`;
                 }
                 html += `</td></tr>`;
             });
@@ -209,6 +244,36 @@ function checkInAppointment(id) {
         if (data.success) loadAppointmentsTable();
         else alert(data.error||'Lỗi check-in!');
     });
+}
+
+// Xem chi tiết medical record
+function openMedicalRecordModal(appointmentId) {
+    document.getElementById('medical-record-modal').style.display = 'flex';
+    document.getElementById('medical-record-detail').innerHTML = 'Đang tải...';
+    fetch('/HeThongChamSocThuCung/backend/api/doctor/medical_records/api_get_medical_record.php?id=' + appointmentId)
+        .then(res => res.json())
+        .then(data => {
+            if (!data || !data.success || !data.record) {
+                document.getElementById('medical-record-detail').innerHTML = '<div style="color:#e53935">Không tìm thấy hồ sơ!</div>';
+                return;
+            }
+            const record = data.record;
+            document.getElementById('medical-record-detail').innerHTML = `
+                <b>Chẩn đoán:</b><br>
+                <div style="white-space:pre-line; margin-bottom:8px; border:1px solid #e6e6e6; border-radius:5px; padding:7px 10px; background:#f9f9f9;">${record.diagnosis || ''}</div>
+                <b>Lịch trình điều trị:</b><br>
+                <div style="white-space:pre-line; margin-bottom:8px; border:1px solid #e6e6e6; border-radius:5px; padding:7px 10px; background:#f9f9f9;">${record.treatment || ''}</div>
+                <b>Ghi chú thêm:</b><br>
+                <div style="white-space:pre-line; margin-bottom:8px; border:1px solid #e6e6e6; border-radius:5px; padding:7px 10px; background:#f9f9f9;">${record.notes || ''}</div>
+                <b>Phí dịch vụ:</b> <span style="font-weight:500">${record.fee ? (parseInt(record.fee).toLocaleString() + " đ") : "0 đ"}</span>
+            `;
+        })
+        .catch(()=>{
+            document.getElementById('medical-record-detail').innerHTML = '<div style="color:#e53935">Lỗi kết nối server!</div>';
+        });
+}
+function closeMedicalRecordModal() {
+    document.getElementById('medical-record-modal').style.display = 'none';
 }
 </script>
 <?php

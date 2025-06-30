@@ -11,7 +11,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $stmt->execute();
     $result = $stmt->get_result();
 
-    $login_success = false;
     if ($result->num_rows === 1) {
         $user = $result->fetch_assoc();
         if (password_verify($inputPassword, $user['password'])) {
@@ -24,30 +23,18 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $_SESSION['full_name'] = $user['full_name'];
             $_SESSION['contact_info'] = $user['contact_info'];
 
-            // Điều hướng theo role
-            switch ($user['role']) {
-                case 'admin':
-                    header('Location: ../../../frontend/admin/admin_dashboard.php');
-                    exit;
-                case 'doctor':
-                    header('Location: ../../../frontend/doctor/doctor_dashboard.php');
-                    exit;
-                case 'customer':
-                    header('Location: ../../../frontend/customer/customer_dashboard.php');
-                    exit;
-                default:
-                    echo "Vai trò không hợp lệ.";
-                    exit;
-            }
+            // Chuyển về dashboard chung
+            header('Location: ../../../frontend/dashboards/dashboard.php');
+            exit;
         }
     }
 
-    // Nếu đến đây là sai tên đăng nhập hoặc mật khẩu
+    // Nếu sai tên đăng nhập hoặc mật khẩu
     header('Location: /HeThongChamSocThuCung/frontend/auth/login.php?error=1');
     exit;
 }
 
-// Nếu muốn giữ lại form đăng nhập ở đây khi truy cập trực tiếp
+// Hiển thị form đăng nhập nếu chưa submit
 if ($_SERVER["REQUEST_METHOD"] !== "POST") {
 ?>
     <form method="POST">
