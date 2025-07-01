@@ -222,7 +222,7 @@ body {
             <div class="hero-desc">Hàng Đầu tại Hồ Chí Minh</div>
             <div class="hero-btn-group">
                 <a href="#services" class="hero-btn">XEM THÊM</a>
-                <a href="/HeThongChamSocThuCung/frontend/customer/appointments.php" class="hero-btn hero-btn-outline">ONLINE BOOKING</a>
+                <a href="/HeThongChamSocThuCung/frontend/appointments/book_appointment.php" class="hero-btn hero-btn-outline">ONLINE BOOKING</a>
             </div>
         </div>
         <div class="hero-img">

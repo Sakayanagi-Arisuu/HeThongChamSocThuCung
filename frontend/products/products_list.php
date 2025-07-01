@@ -45,28 +45,57 @@ if (!isset($_SESSION['role'])) {
 .btn-cart:hover { background: #1565c0; }
 </style>
 
+<div style="margin: 30px 0 10px 0; display:flex; gap:16px; align-items:center;">
+    <input id="search-product" type="text" placeholder="🔍 Tìm kiếm sản phẩm..." 
+    style="padding:12px 18px; border-radius:9px; border:2px solid #1976d2; width:370px; font-size:19px;"/>
+    <select id="filter-category" style="padding:8px 10px; border-radius:7px; border:1.5px solid #e1ecf1;">
+        <option value="">Tất cả loại sản phẩm</option>
+        <option value="Thức ăn cho chó">Thức ăn cho chó</option>
+        <option value="Thức ăn cho mèo">Thức ăn cho mèo</option>
+        <option value="Sản phẩm mới">Sản phẩm mới</option>
+        <option value="Vật tư y tế">Vật tư y tế</option>
+        <option value="Vật dụng cho chó mèo">Vật dụng cho chó mèo</option>
+    </select>
+</div>
+
 <div id="products-catalog"></div>
+
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    fetch('/HeThongChamSocThuCung/backend/api/products/api_get_products.php')
-    .then(res => res.json())
-    .then(data => {
-        let html = '';
-        data.forEach(p=>{
-            html += `
-            <div class="product-card">
-                <img src="${p.image||'/HeThongChamSocThuCung/images/default-product.jpg'}" alt="SP">
-                <div class="product-card-body">
-                    <div class="product-title">${p.name}</div>
-                    <div class="product-desc">${p.description||''}</div>
-                    <div class="product-category">${p.category||''}</div>
-                    <div class="product-price">${Number(p.price).toLocaleString()} đ</div>
-                    <button class="btn-cart" onclick="addToCart(${p.id})">Thêm vào giỏ</button>
-                </div>
-            </div>`;
-        });
-        document.getElementById('products-catalog').innerHTML = html || "<p>Không có sản phẩm.</p>";
+function renderProducts(data) {
+    let html = '';
+    data.forEach(p=>{
+        html += `
+        <div class="product-card">
+            <img src="${p.image||'/HeThongChamSocThuCung/images/default-product.jpg'}" alt="SP">
+            <div class="product-card-body">
+                <div class="product-title">${p.name}</div>
+                <div class="product-desc">${p.description||''}</div>
+                <div class="product-category">${p.category||''}</div>
+                <div class="product-price">${Number(p.price).toLocaleString()} đ</div>
+                <button class="btn-cart" onclick="addToCart(${p.id})">Thêm vào giỏ</button>
+            </div>
+        </div>`;
     });
+    document.getElementById('products-catalog').innerHTML = html || "<p>Không có sản phẩm.</p>";
+}
+
+function fetchAndRenderProducts() {
+    const searchVal = document.getElementById('search-product').value || "";
+    const filterCat = document.getElementById('filter-category').value;
+
+    const params = new URLSearchParams();
+    params.append('q', searchVal);
+    params.append('category', filterCat);
+
+    fetch('/HeThongChamSocThuCung/backend/api/products/api_get_products.php?' + params.toString())
+    .then(res => res.json())
+    .then(data => renderProducts(data));
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    fetchAndRenderProducts();
+    document.getElementById('search-product').addEventListener('input', fetchAndRenderProducts);
+    document.getElementById('filter-category').addEventListener('change', fetchAndRenderProducts);
 });
 
 function addToCart(product_id) {

@@ -119,45 +119,7 @@ foreach ($all_periods as $period) {
     $total_appt_revenue += $doanhthu_appt;
 }
 ?>
-<style>
-#revenue-table {
-    margin: 38px 0 0 0;
-    width: 100%;
-    max-width: 980px;
-}
-#revenue-table table {
-    border-collapse: collapse;
-    width: 100%;
-    background: #fff;
-    border-radius: 14px;
-    overflow: hidden;
-    box-shadow: 0 4px 16px rgba(0,160,200,0.10);
-    font-size: 16px;
-    margin-top: 12px;
-}
-#revenue-table th, #revenue-table td {
-    border: 1px solid #e0eaf1;
-    padding: 10px 12px;
-    text-align: center;
-}
-#revenue-table th {
-    background: #29b6f6;
-    color: #fff;
-    font-weight: bold;
-}
-#revenue-table tr:nth-child(even) { background: #f4fafd;}
-#revenue-table h2 { color: #009fe3; font-size: 28px; margin-bottom: 16px;}
-.main-content {
-    display: flex;
-    align-items: flex-start;
-    justify-content: flex-start;
-    min-height: 70vh;
-}
-.sidebar-right {
-    min-width: 270px;
-    margin-left: 32px;
-}
-</style>
+<link rel="stylesheet" href="/HeThongChamSocThuCung/assets/css/admin/admin_revenue_report.css">
 
 <div class="main-content">
     <div style="flex: 2;">

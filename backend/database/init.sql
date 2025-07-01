@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS users (
     full_name VARCHAR(100) NOT NULL,
     contact_info VARCHAR(100) NOT NULL,
     avatar VARCHAR(255) DEFAULT NULL,
+    address VARCHAR(255) DEFAULT '',
     role ENUM('admin', 'doctor', 'customer', 'guest') DEFAULT 'guest'
 );
 

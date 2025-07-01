@@ -28,8 +28,9 @@ function roleToVietnamese($role) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_info'])) {
     $full_name = trim($_POST['full_name']);
     $contact_info = trim($_POST['contact_info']);
-    $stmt2 = $conn->prepare("UPDATE users SET full_name=?, contact_info=? WHERE username=?");
-    $stmt2->bind_param("sss", $full_name, $contact_info, $username);
+    $address = trim($_POST['address']);
+    $stmt2 = $conn->prepare("UPDATE users SET full_name=?, contact_info=?, address=? WHERE username=?");
+    $stmt2->bind_param("ssss", $full_name, $contact_info, $address, $username);
     if ($stmt2->execute()) {
         $_SESSION['full_name'] = $full_name;
         $_SESSION['contact_info'] = $contact_info;
@@ -113,6 +114,8 @@ $avatar = !empty($user['avatar']) ? $user['avatar'] : '/HeThongChamSocThuCung/im
             <input type="text" name="full_name" value="<?= htmlspecialchars($user['full_name']) ?>" required>
             <label>Email/Số điện thoại liên hệ</label>
             <input type="text" name="contact_info" value="<?= htmlspecialchars($user['contact_info']) ?>" required>
+            <label>Địa chỉ</label>
+            <input type="text" name="address" value="<?= htmlspecialchars($user['address'] ?? '') ?>" placeholder="Nhập địa chỉ của bạn">
             <label>Vai trò</label>
             <input type="text" value="<?= roleToVietnamese($user['role']) ?>" readonly>
             <button type="submit" name="update_info">Lưu thông tin</button>
@@ -125,7 +128,6 @@ $avatar = !empty($user['avatar']) ? $user['avatar'] : '/HeThongChamSocThuCung/im
             fetch('', { method: 'POST', body: formData })
             .then(res => res.text())
             .then(src => {
-                // Chỉ set lại src nếu server trả về đúng path tuyệt đối
                 if(src.startsWith('/HeThongChamSocThuCung/uploads/avatars/')) {
                     document.getElementById('avatarPreview').src = src + '?v=' + Date.now();
                 } else {

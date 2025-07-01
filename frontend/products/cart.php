@@ -21,6 +21,12 @@ if ($res->num_rows > 0) {
     $cart_id = $res->fetch_assoc()['id'];
 }
 
+// Lấy thông tin user
+$user_stmt = $conn->prepare("SELECT full_name, contact_info, address FROM users WHERE id=?");
+$user_stmt->bind_param("i", $user_id);
+$user_stmt->execute();
+$user_info = $user_stmt->get_result()->fetch_assoc();
+
 $items = [];
 if ($cart_id) {
     $stmt = $conn->prepare("
@@ -152,12 +158,25 @@ $total = 0;
     position:absolute;top:16px;right:18px;background:none;border:none;
     font-size:26px;color:#999;cursor:pointer;
 }
+#checkout-modal input[type="text"] {
+    margin-bottom: 10px;
+    border: 1.2px solid #e0eaf1;
+    border-radius: 7px;
+    font-size: 16px;
+    padding: 8px 10px;
+    width: 100%;
+}
 @keyframes popupOpen {
     from {transform:scale(0.95); opacity:0;}
     to {transform:scale(1); opacity:1;}
 }
 </style>
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+<!-- Truyền user_info sang JS -->
+<script>
+var USER_INFO = <?= json_encode($user_info) ?>;
+</script>
 
 <div class="main-content">
     <div style="flex: 2;">
@@ -215,7 +234,11 @@ $total = 0;
 <div id="checkout-modal">
   <div class="checkout-content">
     <button onclick="closeCheckout()" class="close-btn">&times;</button>
-    <h3>Thanh toán đơn hàng</h3>
+    <h3>Thông tin nhận hàng</h3>
+    <label for="checkout-contact" style="font-weight:bold; width:100%; text-align:left;">Email/SĐT liên hệ:</label>
+    <input type="text" id="checkout-contact" readonly>
+    <label for="checkout-address" style="font-weight:bold; width:100%; text-align:left;">Địa chỉ nhận hàng:</label>
+    <input type="text" id="checkout-address">
     <div class="qr-label">Vui lòng quét mã QR để thanh toán</div>
     <img src="/HeThongChamSocThuCung/images/qr_code.png" alt="QR code">
     <button onclick="doneCheckout()" class="done-btn">Đã thanh toán</button>
@@ -224,15 +247,30 @@ $total = 0;
 
 <script>
 function openCheckout() {
+    // Kiểm tra thông tin bắt buộc
+    if (!USER_INFO.contact_info || !USER_INFO.address) {
+        alert('Bạn cần bổ sung đầy đủ số điện thoại/email và địa chỉ nhận hàng để thanh toán!\nNhấn OK để chuyển đến trang cập nhật thông tin cá nhân.');
+        window.location.href = "/HeThongChamSocThuCung/frontend/users/profile.php";
+        return;
+    }
+    // Điền sẵn thông tin vào popup
+    document.getElementById('checkout-contact').value = USER_INFO.contact_info;
+    document.getElementById('checkout-address').value = USER_INFO.address;
     document.getElementById('checkout-modal').style.display = 'flex';
 }
 function closeCheckout() {
     document.getElementById('checkout-modal').style.display = 'none';
 }
 function doneCheckout() {
-    // Gọi API backend xử lý thanh toán (hoặc demo alert)
+    const address = document.getElementById('checkout-address').value.trim();
+    if (!address) {
+        alert('Vui lòng nhập địa chỉ nhận hàng!');
+        return;
+    }
     fetch('/HeThongChamSocThuCung/backend/api/products/cart/checkout_cart.php', {
-        method: 'POST'
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: 'address=' + encodeURIComponent(address)
     })
     .then(res => res.json())
     .then(data => {
