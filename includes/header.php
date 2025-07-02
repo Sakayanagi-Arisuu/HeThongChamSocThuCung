@@ -149,7 +149,7 @@ $role = $_SESSION['role'] ?? 'guest';
 <body>
     <div class="header">
         <div class="logo">
-            <img src="\HeThongChamSocThuCung\images\anh.jpg" alt="logo">
+            <img src="\HeThongChamSocThuCung\assets\images\anh.jpg" alt="logo">
             <span>PET CARE SERVICES</span>
         </div>
         <div class="top-info">

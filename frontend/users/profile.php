@@ -13,7 +13,13 @@ $stmt->bind_param("s", $username);
 $stmt->execute();
 $user = $stmt->get_result()->fetch_assoc();
 
-// Hàm dịch vai trò sang tiếng Việt
+if (!isset($_SESSION['return_to_profile']) && isset($_SERVER['HTTP_REFERER'])) {
+    $referer = $_SERVER['HTTP_REFERER'];
+    if (strpos($referer, "profile.php") === false) {
+        $_SESSION['return_to_profile'] = $referer;
+    }
+}
+
 function roleToVietnamese($role) {
     switch ($role) {
         case 'admin': return 'Quản trị viên';
@@ -24,7 +30,7 @@ function roleToVietnamese($role) {
     }
 }
 
-// Update info
+$redirect_url = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_info'])) {
     $full_name = trim($_POST['full_name']);
     $contact_info = trim($_POST['contact_info']);
@@ -37,13 +43,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_info'])) {
         $success = "Cập nhật thông tin thành công!";
         $stmt->execute();
         $user = $stmt->get_result()->fetch_assoc();
+        $redirect_url = isset($_SESSION['return_to_profile']) ? $_SESSION['return_to_profile'] : '';
+        unset($_SESSION['return_to_profile']);
     } else {
         $error = "Có lỗi xảy ra, vui lòng thử lại.";
     }
     $stmt2->close();
 }
 
-// Upload avatar (AJAX)
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['avatar'])) {
     $uploadDir = '../../uploads/avatars/';
     if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
@@ -70,6 +77,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['avatar'])) {
 }
 
 $avatar = !empty($user['avatar']) ? $user['avatar'] : '/HeThongChamSocThuCung/images/download.jpg';
+$page_title = "Thông tin cá nhân";
+include "../../includes/header.php";
+include "../../includes/navbar_customer.php";
 ?>
 
 <!DOCTYPE html>
@@ -79,19 +89,30 @@ $avatar = !empty($user['avatar']) ? $user['avatar'] : '/HeThongChamSocThuCung/im
     <title>Thông tin cá nhân - Pet Care Services</title>
     <style>
         body { font-family: Arial; background: #f9f9f9;}
-        .profile-box {max-width:450px; margin:40px auto 0; background:#fff; border-radius:10px; box-shadow:0 3px 12px #0001; padding:32px;}
+        .profile-box {
+            max-width:450px; margin:40px auto 0;
+            background:#fff; border-radius:10px;
+            box-shadow:0 3px 12px #0001; padding:32px;
+        }
         .profile-box h2 {color: #0077a3;}
         .avatar {width:110px; height:110px; border-radius:50%; border:2px solid #ddd; object-fit:cover; margin-bottom:10px;}
         .profile-box form {margin-top:15px;}
         .profile-box label {display:block; margin-bottom:5px; font-weight:bold;}
         .profile-box input[type="text"], .profile-box input[type="email"] {width:100%; padding:9px 12px; border:1px solid #ccc; border-radius:6px; margin-bottom:14px;}
         .profile-box input[readonly] {background: #f3f3f3;}
-        .profile-box button, .profile-box .back-btn {background:#0099cc; color:#fff; border:none; border-radius:6px; padding:10px 24px; font-size:16px; font-weight:bold; cursor:pointer; margin-right:8px;}
-        .profile-box .back-btn {background:#ccc; color:#222;}
+        .profile-box .form-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 6px;
+        }
+        .profile-box button, .profile-box .back-btn {
+            background:#0099cc; color:#fff; border:none; border-radius:6px; padding:10px 24px; font-size:16px; font-weight:bold; cursor:pointer;
+        }
+        .profile-box .back-btn {background:#ccc; color:#222; margin-right: 0;}
         .profile-box .back-btn:hover {background:#bbb;}
         .profile-box button[type="submit"]:hover {background:#0077a3;}
-        .msg-success {color:green;}
-        .msg-error {color:red;}
+        .msg-success {color:green; margin-bottom:10px;}
+        .msg-error {color:red; margin-bottom:10px;}
         .avatar-btn {background:#eee; color:#222; border:1px solid #ccc; font-size:13px; border-radius:6px; padding:5px 13px; cursor:pointer;}
     </style>
 </head>
@@ -105,7 +126,15 @@ $avatar = !empty($user['avatar']) ? $user['avatar'] : '/HeThongChamSocThuCung/im
                 <button type="button" class="avatar-btn" onclick="document.getElementById('avatarInput').click()">Đổi ảnh đại diện</button>
             </form>
         </div>
-        <?php if (!empty($success)) echo '<div class="msg-success">'.$success.'</div>'; ?>
+        <?php if (!empty($success) && !empty($redirect_url)): ?>
+            <div class="msg-success"><?= $success ?></div>
+            <script>
+                alert("<?= $success ?>");
+                window.location = "<?= $redirect_url ?>";
+            </script>
+        <?php elseif (!empty($success)): ?>
+            <div class="msg-success"><?= $success ?></div>
+        <?php endif; ?>
         <?php if (!empty($error)) echo '<div class="msg-error">'.$error.'</div>'; ?>
         <form method="POST">
             <label>Tên đăng nhập</label>
@@ -118,8 +147,10 @@ $avatar = !empty($user['avatar']) ? $user['avatar'] : '/HeThongChamSocThuCung/im
             <input type="text" name="address" value="<?= htmlspecialchars($user['address'] ?? '') ?>" placeholder="Nhập địa chỉ của bạn">
             <label>Vai trò</label>
             <input type="text" value="<?= roleToVietnamese($user['role']) ?>" readonly>
-            <button type="submit" name="update_info">Lưu thông tin</button>
-            <button type="button" class="back-btn" onclick="window.history.back();">Trở về</button>
+            <div class="form-actions">
+                <button type="submit" name="update_info">Lưu thông tin</button>
+                <button type="button" class="back-btn" onclick="window.history.back();">Trở về</button>
+            </div>
         </form>
     </div>
     <script>
@@ -136,5 +167,6 @@ $avatar = !empty($user['avatar']) ? $user['avatar'] : '/HeThongChamSocThuCung/im
             });
         }
     </script>
+    <?php include "../../includes/footer.php"; ?>
 </body>
 </html>

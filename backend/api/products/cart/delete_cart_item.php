@@ -28,6 +28,6 @@ if ($cart_id && $cart_item_id) {
 }
 
 // Quay lại trang giỏ hàng
-header("Location: /HeThongChamSocThuCung/frontend/customer/cart.php");
+header("Location: /HeThongChamSocThuCung/frontend/products/cart.php");
 exit;
 ?>

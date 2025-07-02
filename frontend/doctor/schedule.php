@@ -26,89 +26,8 @@ $stmt->bind_param("i", $doctor_id);
 $stmt->execute();
 $result = $stmt->get_result();
 ?>
-<style>
-#doctor-appointments-table {
-    margin: 32px 0 0 0;
-    width: 100%;
-    max-width: 900px;
-}
-.main-content {
-    display: flex;
-    align-items: flex-start;
-    justify-content: flex-start;
-}
-.sidebar-right {
-    min-width: 270px;
-    margin-left: 32px;
-}
-#doctor-appointments-table table {
-    border-collapse: collapse;
-    width: 100%;
-    background: #fff;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 4px 16px rgba(0,160,200,0.10), 0 1.5px 4px rgba(0,0,0,0.08);
-    font-size: 16px;
-    margin-top: 12px;
-}
-#doctor-appointments-table th, #doctor-appointments-table td {
-    border: 1px solid #e0eaf1;
-    padding: 10px 12px;
-    text-align: center;
-}
-#doctor-appointments-table th {
-    background: #29b6f6;
-    color: #fff;
-    font-weight: bold;
-    letter-spacing: 0.5px;
-}
-#doctor-appointments-table tr:nth-child(even) {
-    background: #f4fafd;
-}
-#doctor-appointments-table tr:hover {
-    background: #e0f7fa;
-}
-#doctor-appointments-table h2 {
-    color: #009fe3;
-    font-size: 28px;
-    margin-bottom: 10px;
-    margin-top: 0;
-}
-.status-huy { color: #b71c1c; font-weight:bold; }
-.status-hoanthanh { color: #388e3c; font-weight:bold; }
-.status-chuaxuly { color: #666; }
-.status-dadat { color: #1976d2; }
-.status-checkin { color: #ff9800; font-weight:bold; }
-.btn-kham {
-    padding: 6px 15px; border-radius: 5px; font-weight: 600; border: none; cursor: pointer;
-    background: #e0f7fa; color: #1976d2; transition: background .15s;
-}
-.btn-kham:hover { background: #b5eaff; }
-
-/* Popup medical form */
-#medical-form-modal {
-    display:none; position:fixed; top:0; left:0; width:100vw; height:100vh;
-    background:rgba(0,0,0,0.13); align-items:center; justify-content:center; z-index:9999;
-}
-#medical-form-modal .form-content {
-    background:#fff; border-radius:12px; box-shadow:0 2px 16px #0002; padding:28px 32px; min-width:340px; position:relative;
-    animation:popupOpen .23s;
-}
-@keyframes popupOpen { from {transform:scale(.95);opacity:0;} to {transform:scale(1);opacity:1;} }
-#medical-form-modal h3 {margin-top:0;}
-#medical-form-modal label {display:block; margin-top:10px;}
-#medical-form-modal textarea, #medical-form-modal input[type="number"] {
-    width:100%; border:1px solid #c6e1ee; border-radius:5px; padding:5px 7px; margin-top:2px;
-}
-#medical-form-modal button[type="submit"] {
-    margin-top:14px; width:100%; padding:10px; border-radius:7px; border:none; background:#0099cc; color:#fff; font-weight:bold; font-size:17px; cursor:pointer;
-}
-#medical-form-modal button[type="submit"]:hover { background:#1976d2; }
-#medical-form-modal .close-btn {
-    position:absolute;right:18px;top:14px;background:none;border:none;font-size:26px;color:#999;cursor:pointer;
-}
-#medical-form-msg { margin-top:9px; color:#27ae60; text-align:center; display:none;}
-</style>
+<!-- css -->
+<link rel="stylesheet" href="/HeThongChamSocThuCung/assets/css/doctor/schedule.css">
 
 <div class="main-content">
     <div style="flex: 2;">
@@ -184,50 +103,8 @@ $result = $stmt->get_result();
   </div>
 </div>
 
-<script>
-function openMedicalForm(appointment_id, service) {
-  document.getElementById('medical-form-modal').style.display = 'flex';
-  document.getElementById('medical-appointment-id').value = appointment_id;
-  document.getElementById('medical-service').value = service;
-  document.getElementById('medical-record-form').reset();
-  document.getElementById('medical-form-msg').style.display = 'none';
-  // Nếu là "Khác", show trường phí dịch vụ, ngược lại ẩn
-  if (service.trim() === 'Khác') {
-    document.getElementById('fee-input-box').style.display = '';
-    document.getElementById('fee-input').required = true;
-  } else {
-    document.getElementById('fee-input-box').style.display = 'none';
-    document.getElementById('fee-input').required = false;
-  }
-}
-function closeMedicalForm() {
-  document.getElementById('medical-form-modal').style.display = 'none';
-}
-
-// Xử lý submit ghi nhận khám AJAX
-document.getElementById('medical-record-form').onsubmit = function(e) {
-  e.preventDefault();
-  const formData = new FormData(this);
-  fetch('/HeThongChamSocThuCung/backend/api/doctor/medical_records/api_create_medical_record.php', {
-    method: 'POST',
-    body: formData,
-  })
-  .then(res => res.json())
-  .then(data => {
-    if (data.success) {
-      document.getElementById('medical-form-msg').textContent = 'Đã lưu hồ sơ!';
-      document.getElementById('medical-form-msg').style.display = 'block';
-      setTimeout(()=>{
-        closeMedicalForm();
-        location.reload();
-      }, 1100);
-    } else {
-      alert(data.error || 'Có lỗi!');
-    }
-  })
-  .catch(()=>alert('Lỗi kết nối!'));
-};
-</script>
+<!-- script -->
+<script src="/HeThongChamSocThuCung/assets/js/doctor/schedule.js"></script>
 <?php
 
 include '../../includes/footer.php';
