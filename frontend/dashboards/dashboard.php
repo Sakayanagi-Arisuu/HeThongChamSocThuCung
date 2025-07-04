@@ -53,7 +53,7 @@ switch ($role) {
         <div class="service-card">
             <span class="service-icon">✂️</span>
             <h3>GROOMING</h3>
-            <p>Chúng tôi biết cách làm thế nào để thú cưng của bạn trở nên đẳng cấp và tinh hơn. Dịch vụ cắt tỉa lông giúp bé trở thành phiên bản hoàn hảo nhất.</p>
+            <p>Chúng tôi biết cách làm thế nào để thú cưng của bạn trở nên đẳng cấp và tinh tế hơn. Dịch vụ cắt tỉa lông giúp bé trở thành phiên bản hoàn hảo nhất.</p>
             <!-- <button class="card-btn">Xem Thêm</button> -->
         </div>
         <div class="service-card">

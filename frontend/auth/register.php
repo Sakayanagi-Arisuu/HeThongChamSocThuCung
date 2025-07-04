@@ -20,11 +20,12 @@
             <input type="text" name="contact_info" placeholder="Liên hệ (SĐT hoặc Email)" required>
             <input type="text" name="username" placeholder="Tên đăng nhập" required>
             <input type="password" name="password" placeholder="Mật khẩu" required>
+            <input type="password" name="confirm_password" placeholder="Nhập lại mật khẩu" required>
             <button type="submit">Đăng ký</button>
             <a href="login.php">Đã có tài khoản? Đăng nhập</a>
         </form>
     </div>
-        <!-- script -->
+    <!-- script -->
     <script src="/HeThongChamSocThuCung/assets/js/auth/register.js"></script>
 </body>
 </html>

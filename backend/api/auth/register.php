@@ -5,11 +5,19 @@ header('Content-Type: application/json');
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $username = trim($_POST['username'] ?? '');
     $rawPassword = $_POST['password'] ?? '';
+    $confirmPassword = $_POST['confirm_password'] ?? ''; // Thêm dòng này
     $fullName = trim($_POST['full_name'] ?? '');
     $contactInfo = trim($_POST['contact_info'] ?? '');
 
-    if ($username === "" || $rawPassword === "" || $fullName === "" || $contactInfo === "") {
+    // Kiểm tra thông tin đầu vào
+    if ($username === "" || $rawPassword === "" || $confirmPassword === "" || $fullName === "" || $contactInfo === "") {
         echo json_encode(['success' => false, 'message' => 'Vui lòng nhập đầy đủ thông tin.']);
+        exit;
+    }
+
+    // Kiểm tra xác nhận mật khẩu
+    if ($rawPassword !== $confirmPassword) {
+        echo json_encode(['success' => false, 'message' => 'Mật khẩu xác nhận không khớp.']);
         exit;
     }
 

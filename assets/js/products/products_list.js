@@ -1,15 +1,15 @@
 function renderProducts(data) {
     let html = '';
-    data.forEach(p=>{
+    data.forEach(p => {
         html += `
         <div class="product-card">
-            <img src="${p.image||'/HeThongChamSocThuCung/assets/images/default-product.jpg'}" alt="SP">
+            <img src="${p.image || 'anh.jpg'}" alt="SP" />
             <div class="product-card-body">
                 <div class="product-title">${p.name}</div>
-                <div class="product-desc">${p.description||''}</div>
-                <div class="product-category">${p.category||''}</div>
+                <div class="product-desc">${p.description}</div>
+                <div class="product-category">${p.category}</div>
                 <div class="product-price">${Number(p.price).toLocaleString()} đ</div>
-                <button class="btn-cart" onclick="addToCart(${p.id})">Thêm vào giỏ</button>
+                <button class="btn-cart" onclick="addToCart('${p.id}')">Thêm vào giỏ</button>
             </div>
         </div>`;
     });

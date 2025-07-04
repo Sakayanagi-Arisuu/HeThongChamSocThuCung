@@ -22,7 +22,85 @@ if (!isset($_SESSION['role'])) {
     }
 }
 ?>
-<link rel="stylesheet" href="/HeThongChamSocThuCung/assets/css/products/products_list.css">
+
+<!-- <link rel="stylesheet" href="/HeThongChamSocThuCung/assets/css/products/products_list.css"> -->
+
+<!--  CSS ko lỗi-->
+<style>
+.products-page #products-catalog {
+    margin: 40px auto;
+    max-width: 1200px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    justify-items: center;
+}
+.product-card {
+    width: 250px;
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 3px 16px #0001;
+    overflow: hidden;
+    border: 1.5px solid #e1ecf1;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.18s, box-shadow 0.18s;
+    padding-bottom: 16px;
+    min-height: 370px;
+}
+.product-card img {
+    width: 100%;
+    height: 170px;
+    object-fit: cover;
+    background: #f7f7f7;
+}
+.product-card-body {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    padding: 18px 16px 0 16px;
+}
+.product-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #1976d2;
+    margin-bottom: 4px;
+}
+.product-desc {
+    font-size: 15px;
+    color: #444;
+    flex: 1;
+    margin-bottom: 8px;
+}
+.product-category {
+    font-size: 13px;
+    color: #999;
+    margin-bottom: 6px;
+}
+.product-price {
+    font-size: 17px;
+    color: #e53935;
+    font-weight: bold;
+    margin-bottom: 12px;
+}
+.btn-cart {
+    background: #1976d2;
+    color: #fff;
+    border-radius: 7px;
+    padding: 10px 0;
+    border: none;
+    font-weight: 600;
+    font-size: 15px;
+    width: 100%;
+    cursor: pointer;
+    margin-top: auto;
+    transition: background .16s;
+}
+.btn-cart:hover {
+    background: #1565c0;
+}
+
+</style>
 
 <div class="products-page">
     <div class="products-toolbar" style="margin: 30px 0 10px 0; display:flex; gap:16px; align-items:center;">

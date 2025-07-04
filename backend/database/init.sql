@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS users (
     role ENUM('admin', 'doctor', 'customer', 'guest') DEFAULT 'guest'
 );
 
-CREATE TABLE orders (
+CREATE TABLE IF NOT EXISTS orders (
     id INT AUTO_INCREMENT PRIMARY KEY,
     customer_id INT,
     total_amount DECIMAL(10,2),
@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS pets (
     FOREIGN KEY (owner_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
-CREATE TABLE appointments (
+CREATE TABLE IF NOT EXISTS appointments (
     id INT AUTO_INCREMENT PRIMARY KEY,
     pet_id INT,
     customer_id INT,
@@ -62,7 +62,7 @@ CREATE TABLE IF NOT EXISTS medical_records (
     diagnosis TEXT,
     treatment TEXT,
     notes TEXT,
-    medical_records ADD COLUMN fee FLOAT DEFAULT 0;
+    fee FLOAT DEFAULT 0;
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (appointment_id) REFERENCES appointments(id)
 );

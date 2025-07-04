@@ -148,34 +148,37 @@ $role = $_SESSION['role'] ?? 'guest';
 </head>
 <body>
     <div class="header">
-        <div class="logo">
-            <img src="\HeThongChamSocThuCung\assets\images\anh.jpg" alt="logo">
-            <span>PET CARE SERVICES</span>
-        </div>
-        <div class="top-info">
-            <span class="worktime">
-                <img src="https://img.icons8.com/material-sharp/20/0099cc/phone.png" alt="phone" />
-                <span class="worktext">
-                    Làm việc từ T2 - CN
-                    <span style="font-weight:bold; font-size:15px;">7:00 AM - 7:00 PM</span>
-                </span>
-            </span>
-            <?php if ($role == 'customer' || $role == 'guest'): ?>
-            <span>
-                <img src="https://img.icons8.com/ios-filled/22/0099cc/calendar--v1.png" style="vertical-align: middle;">
-                <a href="\HeThongChamSocThuCung\frontend\appointments\book_appointment.php" class="datlich">ĐẶT LỊCH HẸN</a>
-            </span>
-            <?php endif; ?>
-            <?php if ($role == 'customer' || $role == 'doctor'): ?>
-            <span>
-                <a href="\HeThongChamSocThuCung\frontend\products\cart.php" class="datlich" style="background:#33b7ff;">
-                    GIỎ HÀNG
-                    <img src="https://img.icons8.com/ios-glyphs/18/ffffff/shopping-cart.png" style="vertical-align: middle;">
-                </a>
-            </span>
-            <?php endif; ?>
-        </div>
+    <div class="logo">
+        <img src="\HeThongChamSocThuCung\assets\images\anh.jpg" alt="logo">
+        <span>PET CARE SERVICES</span>
     </div>
+    <div class="top-info">
+        <span class="worktime" style="align-items: center;">
+            <!-- Dịch icon điện thoại sang trái bằng margin-right -->
+            <img src="https://img.icons8.com/material-sharp/20/0099cc/phone.png" alt="phone" style="margin-right: 5px; margin-left: -7px;">
+            <!-- Thêm số điện thoại bên cạnh icon -->
+            <span style="font-weight:bold; color:#e74c3c; font-size:17px; margin-right: 13px;">099998888</span>
+            <span class="worktext">
+                Làm việc từ T2 - CN
+                <span style="font-weight:bold; font-size:15px;">7:00 AM - 7:00 PM</span>
+            </span>
+        </span>
+        <?php if ($role == 'customer' || $role == 'guest'): ?>
+        <span>
+            <img src="https://img.icons8.com/ios-filled/22/0099cc/calendar--v1.png" style="vertical-align: middle;">
+            <a href="\HeThongChamSocThuCung\frontend\appointments\book_appointment.php" class="datlich">ĐẶT LỊCH HẸN</a>
+        </span>
+        <?php endif; ?>
+        <?php if ($role == 'customer' || $role == 'doctor'): ?>
+        <span>
+            <a href="\HeThongChamSocThuCung\frontend\products\cart.php" class="datlich" style="background:#33b7ff;">
+                GIỎ HÀNG
+                <img src="https://img.icons8.com/ios-glyphs/18/ffffff/shopping-cart.png" style="vertical-align: middle;">
+            </a>
+        </span>
+        <?php endif; ?>
+    </div>
+</div>
     <script>
     document.onclick = function(e) {
         var menu = document.getElementById('userMenu');

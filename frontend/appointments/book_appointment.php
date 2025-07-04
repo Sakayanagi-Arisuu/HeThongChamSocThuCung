@@ -64,10 +64,10 @@ include '../../includes/navbar_customer.php';
             <label>Chuyên khoa - Dịch vụ</label>
             <select name="service" required>
                 <option value="">Chọn dịch vụ cần đặt lịch</option>
-                <option value="Khám tổng quát">Khám tổng quát</option>
-                <option value="Khám chuyên khoa">Khám chuyên khoa</option>
-                <option value="Tiêm phòng">Tiêm phòng</option>
-                <option value="Tắm, vệ sinh, cắt tỉa lông">Tắm, vệ sinh, cắt tỉa lông</option>
+                <option value="Khám tổng quát">Khám tổng quát (400.000 vnđ)</option>
+                <option value="Khám chuyên khoa">Khám chuyên khoa (300.000 vnđ)</option>
+                <option value="Tiêm phòng">Tiêm phòng (200.000 vnđ)</option>
+                <option value="Tắm, vệ sinh, cắt tỉa lông">Tắm, vệ sinh, cắt tỉa lông (100.000 vnđ)</option>
                 <option value="Khác">Khác...</option>
             </select>
 
