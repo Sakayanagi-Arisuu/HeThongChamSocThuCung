@@ -19,8 +19,8 @@ $user_id = $user_result->fetch_assoc()['id'];
 // Lấy thú cưng của user này
 $pets = $conn->query("SELECT id, name FROM pets WHERE owner_id = $user_id");
 
-// Lấy danh sách bác sĩ
-$doctors = $conn->query("SELECT id, username FROM users WHERE role = 'doctor'");
+// Lấy danh sách bác sĩ (hiển thị full_name)
+$doctors = $conn->query("SELECT id, full_name FROM users WHERE role = 'doctor'");
 
 include '../../includes/header.php';
 include '../../includes/navbar_customer.php';
@@ -54,7 +54,7 @@ include '../../includes/navbar_customer.php';
             <select name="doctor_id" required>
                 <option value="">-- Chọn bác sĩ --</option>
                 <?php foreach ($doctors as $row): ?>
-                    <option value="<?= $row['id'] ?>"><?= htmlspecialchars($row['username']) ?></option>
+                    <option value="<?= $row['id'] ?>"><?= htmlspecialchars($row['full_name']) ?></option>
                 <?php endforeach; ?>
             </select>
 
@@ -84,6 +84,5 @@ include '../../includes/navbar_customer.php';
 <script src="/HeThongChamSocThuCung/assets/js/appointments/book_appointment.js"></script>
 
 <?php
-
 include '../../includes/footer.php';
 ?>

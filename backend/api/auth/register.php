@@ -5,7 +5,7 @@ header('Content-Type: application/json');
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $username = trim($_POST['username'] ?? '');
     $rawPassword = $_POST['password'] ?? '';
-    $confirmPassword = $_POST['confirm_password'] ?? ''; // Thêm dòng này
+    $confirmPassword = $_POST['confirm_password'] ?? '';
     $fullName = trim($_POST['full_name'] ?? '');
     $contactInfo = trim($_POST['contact_info'] ?? '');
 
