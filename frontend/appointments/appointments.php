@@ -24,7 +24,7 @@ include '../../includes/navbar_customer.php';
   <div class="payment-popup">
     <button onclick="closePaymentModal()" class="close-btn">&times;</button>
     <h3 style="margin:10px 0 14px 0; color:#29b6f6; font-size:21px;">Vui lòng quét mã QR để thanh toán</h3>
-    <img id="qrImage" src="/HeThongChamSocThuCung/images/qr_code.png" alt="QR Code">
+    <img id="qrImage" src="/HeThongChamSocThuCung/assets/images/qr_code.png" alt="QR Code">
     <div>
       <button id="btnPaid" class="checkout-btn">Đã thanh toán</button>
     </div>
